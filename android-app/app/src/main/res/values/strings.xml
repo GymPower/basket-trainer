@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">MyBasketTrainer</string>
     <string name="welcome_message">Welcome to BasketTrainer</string>
+    <string name="login">Login</string>
+    <string name="user">User</string>
+    <string name="password">Password</string>
+    <string name="text_to_register">Don\'t have an account? Sign up</string>
 </resources>
