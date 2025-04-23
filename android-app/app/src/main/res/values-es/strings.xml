@@ -2,4 +2,8 @@
 <resources>
     <string name="app_name">MyBasketTrainer</string>
     <string name="welcome_message">Bienvenido a BasketTrainer</string>
+    <string name="login">Iniciar sesión</string>
+    <string name="user">Usuario</string>
+    <string name="password">Contraseña</string>
+    <string name="text_to_register">¿No tienes cuenta? Regístrate</string>
 </resources>

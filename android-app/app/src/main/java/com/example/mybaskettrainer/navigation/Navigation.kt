@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.mybaskettrainer.ui.screens.LoginScreen
 import com.example.mybaskettrainer.ui.screens.MainScreen
+import com.example.mybaskettrainer.ui.screens.RegisterScreen
 import com.example.mybaskettrainer.ui.screens.SplashScreen
 
 @Composable
@@ -25,6 +26,9 @@ fun Navigation(
         }
         composable(Routes.LoginScreen.route) {
             LoginScreen(navController)
+        }
+        composable(Routes.RegisterScreen.route) {
+            RegisterScreen(navController)
         }
 
 
