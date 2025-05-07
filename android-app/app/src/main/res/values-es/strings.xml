@@ -6,4 +6,7 @@
     <string name="user">Usuario</string>
     <string name="password">Contraseña</string>
     <string name="text_to_register">¿No tienes cuenta? Regístrate</string>
+    <string name="text_to_sing_up"> ¿Ya tienes cuenta? Inicia sesión</string>
+    <string name="register">Registrarse</string>
+    <string name="registered">Registrado</string>
 </resources>

@@ -5,4 +5,8 @@
     <string name="user">User</string>
     <string name="password">Password</string>
     <string name="text_to_register">Don\'t have an account? Sign up</string>
+    <string name="text_to_sing_up">Do you already have an account? Sign in</string>
+    <string name="register">Register</string>
+    <string name="registered">Registered</string>
+
 </resources>

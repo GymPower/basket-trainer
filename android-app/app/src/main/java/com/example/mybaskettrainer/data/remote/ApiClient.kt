@@ -1,10 +1,11 @@
 package com.example.mybaskettrainer.data.remote
 
+
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiClient {
-    private const val BASE_URL = "http://10.0.2.2:8080"
+    private const val BASE_URL = "http://10.0.2.2:8080" // o tu IP del backend
 
     val authApi: AuthApi by lazy {
         Retrofit.Builder()
