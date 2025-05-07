@@ -20,10 +20,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.mybaskettrainer.R
 import com.example.mybaskettrainer.ui.theme.MyBasketTrainerTheme
 
@@ -68,7 +70,7 @@ fun RegisterScreen(navController: NavHostController) {
             println("Registrado: $username")
             navController.navigate("loginScreen")
         }) {
-            Text("Registrarse")
+            Text(text= stringResource(R.string.register))
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -76,7 +78,16 @@ fun RegisterScreen(navController: NavHostController) {
         TextButton(onClick = {
             navController.navigate("loginScreen")
         }) {
-            Text("¿Ya tienes cuenta? Inicia sesión")
+            Text(text = stringResource(R.string.text_to_sing_up))
         }
     }
 }
+
+
+@Preview(showBackground = true)
+@Composable
+fun RegisterScreenPreview() {
+    val fakeNavController = rememberNavController()
+    MyBasketTrainerTheme {
+        RegisterScreen(navController = fakeNavController)
+    }}

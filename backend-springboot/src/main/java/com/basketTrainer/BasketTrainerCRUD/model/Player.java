@@ -47,7 +47,7 @@ public class Player {
     private Trainer trainer;
 
     @ManyToOne
-    @JoinColumn(name = "team_dni")
+    @JoinColumn(name = "team_id")
     private Team team;
 
 
