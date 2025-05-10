@@ -90,7 +90,7 @@ fun LoginScreen(navController: NavHostController) {
                             } else {
                                 Toast.makeText(
                                     context,
-                                    "Usuario o contraseña incorrectos",
+                                    R.string.user_wrong,
                                     Toast.LENGTH_LONG
                                 ).show()
                             }
@@ -99,7 +99,7 @@ fun LoginScreen(navController: NavHostController) {
                         withContext(Dispatchers.Main) {
                             Toast.makeText(
                                 context,
-                                "Error de conexión: ${e.localizedMessage}",
+                                "${R.string.connection_error} ${e.localizedMessage}",
                                 Toast.LENGTH_LONG
                             ).show()
                         }

@@ -8,5 +8,52 @@
     <string name="text_to_sing_up">Do you already have an account? Sign in</string>
     <string name="register">Register</string>
     <string name="registered">Registered</string>
+    <string name="user_wrong">Incorrect username or password</string>
+    <string name="connection_error">Connection error:</string>
+
+    //RegisterScreen
+    <string name="trainer_register">Coach Registration</string>
+    <string name="dni">DNI</string>
+    <string name="name">Name</string>
+    <string name="first_surname">First surname</string>
+    <string name="second_surname">Second surname</string>
+    <string name="birthdate">Birthdate (yyyy-mm-dd)</string>
+    <string name="phone">Phone</string>
+    <string name="email">Email</string>
+
+    //MainScreen
+    <string name="my_teams">My teams </string>
+    <string name="my_players">My players</string>
+    <string name="agenda">Agenda</string>
+    <string name="playbook">Playbook</string>
+    <string name="scoreboard">Scoreboard</string>
+    <string name="logout">Log out</string>
+
+    //TeamScreen
+    <string name="add_team">Add Team</string>
+    <string name="edit_team">Edit Team</string>
+    <string name="no_teams">No teams created yet</string>
+    <string name="team_name">Team Name</string>
+    <string name="category">Category</string>
+    <string name="league">League</string>
+    <string name="player_count">Number of Players</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="team_details">Team Details</string>
+    <string name="loading">Loading...</string>
+    <string name="team_not_found">Team not found</string>
+    <string name="error_loading_teams">Error loading teams</string>
+    <string name="error_loading_team">Error loading team</string>
+    <string name="error_creating_team">Error creating team</string>
+    <string name="error_updating_team">Error updating team</string>
+    <string name="error_deleting_team">Error deleting team</string>
+    <string name="team_created">Team created successfully</string>
+    <string name="team_updated">Team updated successfully</string>
+    <string name="team_deleted">Team deleted successfully</string>
+    <string name="required_fields">Name and category are required</string>
+    <string name="save">Save</string>
+    <string name="create">Create</string>
+
+
 
 </resources>

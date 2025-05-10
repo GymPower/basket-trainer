@@ -9,4 +9,53 @@
     <string name="text_to_sing_up"> ¿Ya tienes cuenta? Inicia sesión</string>
     <string name="register">Registrarse</string>
     <string name="registered">Registrado</string>
+    <string name="user_wrong">Usuario o contraseña incorrectos</string>
+    <string name="connection_error">Error de conexión:</string>
+
+    //RegisterScreen
+    <string name="trainer_register">Registro de Entrenador</string>
+    <string name="dni">DNI</string>
+    <string name="name">Nombre</string>
+    <string name="first_surname">Primer Apellido</string>
+    <string name="second_surname">Segundo Apellido</string>
+    <string name="birthdate">Fecha de nacimiento (yyyy-mm-dd)</string>
+    <string name="phone">Teléfono</string>
+    <string name="email">Email</string>
+
+    //MainScreen
+    <string name="my_teams">Mis equipos</string>
+    <string name="my_players">Mis jugadores</string>
+    <string name="agenda">Agenda</string>
+    <string name="playbook">Pizarra</string>
+    <string name="scoreboard">Marcador</string>
+    <string name="logout">Cerrar sesión</string>
+
+
+    //TeamScreen
+    <string name="add_team">Añadir equipo</string>
+    <string name="edit_team">Editar Equipo</string>
+    <string name="no_teams">No Hay equipos disponibles</string>
+    <string name="team_name">Nombre equipo</string>
+    <string name="category">Categoria</string>
+    <string name="league">Liga</string>
+    <string name="player_count">Número de jugadores</string>
+    <string name="edit">Editar</string>
+    <string name="delete">Eliminar</string>
+    <string name="team_details">Detalles de equipo</string>
+    <string name="loading">Loading...</string>
+    <string name="team_not_found">Equipo no encontrado</string>
+    <string name="error_loading_teams">Error cargando equipos</string>
+    <string name="error_loading_team">Error cargando equipo</string>
+    <string name="error_creating_team">Error creando equipo</string>
+    <string name="error_updating_team">Error actualizando equipo</string>
+    <string name="error_deleting_team">Error borrando equipo</string>
+    <string name="team_created">Equipo creado satisfactoriamente</string>
+    <string name="team_updated">Equipo actualizado satisfactoriamente</string>
+    <string name="team_deleted">Equipo eliminado satisfactoriamente</string>
+    <string name="required_fields">Nombre de la categorría requerido</string>
+    <string name="save">Guardar</string>
+    <string name="create">Crear</string>
+
+
+
 </resources>

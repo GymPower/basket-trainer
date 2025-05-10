@@ -1,17 +1,27 @@
 package com.example.mybaskettrainer.data.remote
 
-
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object ApiClient {
-    private const val BASE_URL = "http://10.0.2.2:8080" // o tu IP del backend
 
-    val authApi: AuthApi by lazy {
+object ApiClient {
+    private const val BASE_URL = "http://10.0.2.2:8080"
+
+    private val retrofit: Retrofit by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(AuthApi::class.java)
     }
+
+    val authApi: AuthApi by lazy {
+        retrofit.create(AuthApi::class.java)
+    }
+
+    val teamApi: TeamApi by lazy {
+        retrofit.create(TeamApi::class.java)
+    }
+
+
+
 }
