@@ -49,19 +49,19 @@ fun RegisterScreen(navController: NavHostController) {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Registro de Entrenador", style = MaterialTheme.typography.headlineMedium)
+        Text(text= stringResource(R.string.trainer_register), style = MaterialTheme.typography.headlineMedium)
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        OutlinedTextField(value = dni, onValueChange = { dni = it }, label = { Text("DNI") })
-        OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text("Nombre") })
-        OutlinedTextField(value = surname1, onValueChange = { surname1 = it }, label = { Text("Primer Apellido") })
-        OutlinedTextField(value = surname2, onValueChange = { surname2 = it }, label = { Text("Segundo Apellido (opcional)") })
-        OutlinedTextField(value = birthdate, onValueChange = { birthdate = it }, label = { Text("Fecha de nacimiento (yyyy-mm-dd)") })
-        OutlinedTextField(value = phone, onValueChange = { phone = it }, label = { Text("Teléfono") })
-        OutlinedTextField(value = email, onValueChange = { email = it }, label = { Text("Email") })
-        OutlinedTextField(value = username, onValueChange = { username = it }, label = { Text("Nombre de Usuario") })
-        OutlinedTextField(value = password, onValueChange = { password = it }, label = { Text("Contraseña") }, visualTransformation = PasswordVisualTransformation())
+        OutlinedTextField(value = dni, onValueChange = { dni = it }, label = { Text(text= stringResource(R.string.dni)) })
+        OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text(text = stringResource(R.string.name)) })
+        OutlinedTextField(value = surname1, onValueChange = { surname1 = it }, label = { Text(text= stringResource(R.string.first_surname)) })
+        OutlinedTextField(value = surname2, onValueChange = { surname2 = it }, label = { Text(text = stringResource(R.string.second_surname)) })
+        OutlinedTextField(value = birthdate, onValueChange = { birthdate = it }, label = { Text(text = stringResource(R.string.birthdate)) })
+        OutlinedTextField(value = phone, onValueChange = { phone = it }, label = { Text(text = stringResource(R.string.phone)) })
+        OutlinedTextField(value = email, onValueChange = { email = it }, label = { Text(text = stringResource(R.string.email)) })
+        OutlinedTextField(value = username, onValueChange = { username = it }, label = { Text(text = stringResource(R.string.user)) })
+        OutlinedTextField(value = password, onValueChange = { password = it }, label = { Text(text = stringResource(R.string.password)) }, visualTransformation = PasswordVisualTransformation())
 
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -90,4 +90,5 @@ fun RegisterScreenPreview() {
     val fakeNavController = rememberNavController()
     MyBasketTrainerTheme {
         RegisterScreen(navController = fakeNavController)
-    }}
+    }
+}
