@@ -1,19 +1,41 @@
+#Configuración render
+#spring:
+#  datasource:
+#    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/defaultdb}
+#    username: ${SPRING_DATASOURCE_USERNAME:root}
+#    password: ${SPRING_DATASOURCE_PASSWORD:}
+#    driver-class-name: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME:com.mysql.cj.jdbc.Driver}
+#  jpa:
+#    hibernate:
+#      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
+#    show-sql: ${SPRING_JPA_SHOW_SQL:true}
+#    properties:
+#      hibernate:
+#        dialect: ${SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT:org.hibernate.dialect.MySQL8Dialect}
+#
+#javax:
+#  net:
+#    ssl:
+#      trustStore: ${JAVAX_NET_SSL_TRUSTSTORE:classpath:ssl/truststore.jks}
+#      trustStorePassword: ${JAVAX_NET_SSL_TRUSTSTOREPASSWORD:changeit}
+
+#Configuración local
 spring:
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/defaultdb}
-    username: ${SPRING_DATASOURCE_USERNAME:root}
-    password: ${SPRING_DATASOURCE_PASSWORD:}
-    driver-class-name: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME:com.mysql.cj.jdbc.Driver}
+    url: jdbc:mysql://baskettrainer-db-baskettrainer-db.k.aivencloud.com:27546/defaultdb?ssl-mode=VERIFY_CA&useSSL=true
+    username: avnadmin
+    password: [AIVEN_PASSWORD]
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
-    show-sql: ${SPRING_JPA_SHOW_SQL:true}
+      ddl-auto: update
+    show-sql: true
     properties:
       hibernate:
-        dialect: ${SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT:org.hibernate.dialect.MySQL8Dialect}
+        dialect: org.hibernate.dialect.MySQL8Dialect
 
 javax:
   net:
     ssl:
-      trustStore: ${JAVAX_NET_SSL_TRUSTSTORE:classpath:ssl/truststore.jks}
-      trustStorePassword: ${JAVAX_NET_SSL_TRUSTSTOREPASSWORD:changeit}
+      trustStore: classpath:ssl/truststore.jks
+      trustStorePassword: changeit
