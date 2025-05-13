@@ -11,15 +11,15 @@ import retrofit2.http.Path
 
 
 interface TeamApi {
-    @GET("teams")
-    suspend fun getTeams(): Response<List<Team>>
+    @GET("api/teams/{trainerDni}")
+    suspend fun getTeamsByTrainer(@Path("trainerDni") trainerDni: String): Response<List<Team>>
 
-    @POST("teams")
-    suspend fun createTeam(@Body team: Team): Response<Team>
+    @POST("api/teams/{trainerDni}")
+    suspend fun createTeam(@Path("trainerDni") trainerDni: String, @Body team: Team): Response<Team>
 
-    @PUT("teams/{id}")
-    suspend fun updateTeam(@Path("id") id: Int, @Body team: Team): Response<Team>
+    @PUT("api/teams/{id}")
+    suspend fun updateTeam(@Path("id") id: Long, @Body team: Team): Response<Team>
 
-    @DELETE("teams/{id}")
-    suspend fun deleteTeam(@Path("id") id: Int): Response<Unit>
+    @DELETE("api/teams/{id}")
+    suspend fun deleteTeam(@Path("id") id: Long): Response<Unit>
 }
