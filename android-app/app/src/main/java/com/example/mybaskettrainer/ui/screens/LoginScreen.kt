@@ -1,45 +1,46 @@
 package com.example.mybaskettrainer.ui.screens
 
 import android.widget.Toast
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.mybaskettrainer.R
-import com.example.mybaskettrainer.data.remote.dto.LoginRequest
 import com.example.mybaskettrainer.ui.theme.MyBasketTrainerTheme
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.example.mybaskettrainer.ui.viewmodel.LoginViewModel
 
 @Composable
-fun LoginScreen(navController: NavHostController) {
+fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = viewModel()) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    val context = androidx.compose.ui.platform.LocalContext.current
-    val api = com.example.mybaskettrainer.data.remote.ApiClient.authApi
+    val context = LocalContext.current
+
+    val isLoading by remember { derivedStateOf { viewModel.isLoading } }
+    val errorMessage by remember { derivedStateOf { viewModel.errorMessage } }
+    val trainerDni by viewModel.trainerDni.collectAsState()
+
+    LaunchedEffect(trainerDni) {
+        if (trainerDni != null) {
+            navController.navigate("mainScreen") {
+                popUpTo("loginScreen") { inclusive = true }
+            }
+        }
+    }
+
+    LaunchedEffect(errorMessage) {
+        errorMessage?.let {
+            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -61,7 +62,8 @@ fun LoginScreen(navController: NavHostController) {
             onValueChange = { username = it },
             label = { Text(text = stringResource(R.string.user)) },
             singleLine = true,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            enabled = !isLoading
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -72,51 +74,32 @@ fun LoginScreen(navController: NavHostController) {
             label = { Text(text = stringResource(R.string.password)) },
             singleLine = true,
             visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            enabled = !isLoading
         )
 
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(
-            onClick = {
-                val loginRequest = LoginRequest(username, password)
-
-                CoroutineScope(Dispatchers.IO).launch {
-                    try {
-                        val response = api.login(loginRequest)
-                        withContext(Dispatchers.Main) {
-                            if (response.isSuccessful && response.body()?.trainerDni != null) {
-                                navController.navigate("mainScreen")
-                            } else {
-                                Toast.makeText(
-                                    context,
-                                    R.string.user_wrong,
-                                    Toast.LENGTH_LONG
-                                ).show()
-                            }
-                        }
-                    } catch (e: Exception) {
-                        withContext(Dispatchers.Main) {
-                            Toast.makeText(
-                                context,
-                                "${R.string.connection_error} ${e.localizedMessage}",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-                    }
-                }
-            },
-            modifier = Modifier.fillMaxWidth()
+            onClick = { viewModel.login(username, password) },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = !isLoading
         ) {
-            Text(text = stringResource(R.string.login))
+            if (isLoading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(24.dp),
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            } else {
+                Text(text = stringResource(R.string.login))
+            }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
         TextButton(
-            onClick = {
-                navController.navigate("registerScreen")
-            }
+            onClick = { navController.navigate("registerScreen") },
+            enabled = !isLoading
         ) {
             Text(text = stringResource(R.string.text_to_register))
         }

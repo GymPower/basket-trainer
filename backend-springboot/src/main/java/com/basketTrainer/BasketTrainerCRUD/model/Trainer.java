@@ -51,12 +51,4 @@ public class Trainer {
     private List<Player> players;
 
 
-
-
-
-
-
-
-
-
 }

@@ -63,7 +63,7 @@ fun TeamsScreen(navController: NavHostController) {
     LaunchedEffect(Unit) {
         isLoading.value = true
         try {
-            val response = ApiClient.teamApi.getTeams()
+            val response = ApiClient.teamApi.getTeamsByTrainer("dni")//TODO, añadir el val del dni
             if (response.isSuccessful) {
                 teamsState.value = response.body()?.sortedByDescending { it.isFavorite } ?: emptyList()
             } else {

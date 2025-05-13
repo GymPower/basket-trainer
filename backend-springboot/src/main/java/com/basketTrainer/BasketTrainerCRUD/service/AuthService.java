@@ -15,12 +15,10 @@ public class AuthService {
 
     public LoginResponse login(LoginRequest request) {
 
-        final Trainer trainer = this.iTrainerRepository.findByUsername(request.getUsername());
-
+        Trainer trainer = this.iTrainerRepository.findByUsername(request.getUsername());
         if (trainer == null || !trainer.getPassword().equals(request.getPassword())) {
-            throw new RuntimeException("Usuario o contraseña incorrectos");
+            throw new RuntimeException("Credenciales inválidas");
         }
-
-        return new LoginResponse("Login correcto", trainer.getDni());
+        return new LoginResponse("Login exitoso", trainer.getDni());
     }
 }
