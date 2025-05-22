@@ -1,6 +1,5 @@
 package com.example.mybaskettrainer.ui.screens
 
-
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,34 +30,29 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.navigation.NavOptionsBuilder
-import androidx.navigation.compose.rememberNavController
 import com.example.mybaskettrainer.R
-import com.example.mybaskettrainer.data.model.Team
+import com.example.mybaskettrainer.data.model.Player
 import com.example.mybaskettrainer.data.remote.ApiClient
-import com.example.mybaskettrainer.ui.theme.MyBasketTrainerTheme
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TeamDetailScreen(teamId: Int, navController: NavHostController) {
+fun PlayerDetailScreen(playerId: Int, navController: NavHostController) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    val teamState = remember { mutableStateOf<Team?>(null) }
+    val playerState = remember { mutableStateOf<Player?>(null) }
     val isLoading = remember { mutableStateOf(true) }
 
-    // Cargar detalles del equipo
-    LaunchedEffect(teamId) {
+    LaunchedEffect(playerId) {
         isLoading.value = true
         try {
-            val response = ApiClient.teamApi.getTeams()
+            val response = ApiClient.playerApi.getPlayers()
             if (response.isSuccessful) {
-                teamState.value = response.body()?.find { it.teamId == teamId }
+                playerState.value = response.body()?.find { it.playerId == playerId }
             } else {
-                Toast.makeText(context, R.string.error_loading_team, Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, R.string.error_loading_player, Toast.LENGTH_SHORT).show()
             }
         } catch (e: Exception) {
             Toast.makeText(context, "${R.string.connection_error}: ${e.message}", Toast.LENGTH_SHORT).show()
@@ -69,7 +63,7 @@ fun TeamDetailScreen(teamId: Int, navController: NavHostController) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(R.string.team_details)) },
+                title = { Text(stringResource(R.string.player_details)) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
@@ -88,7 +82,7 @@ fun TeamDetailScreen(teamId: Int, navController: NavHostController) {
             ) {
                 Text(text = stringResource(R.string.loading))
             }
-        } else if (teamState.value == null) {
+        } else if (playerState.value == null) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -97,12 +91,12 @@ fun TeamDetailScreen(teamId: Int, navController: NavHostController) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = stringResource(R.string.team_not_found),
+                    text = stringResource(R.string.player_not_found),
                     style = MaterialTheme.typography.bodyLarge
                 )
             }
         } else {
-            val team = teamState.value!!
+            val player = playerState.value!!
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -111,19 +105,27 @@ fun TeamDetailScreen(teamId: Int, navController: NavHostController) {
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Text(
-                    text = team.name,
+                    text = "${player.name} ${player.firstSurname} ${player.secondSurname} ",
                     style = MaterialTheme.typography.headlineMedium
                 )
                 Text(
-                    text = "${stringResource(R.string.category)}: ${team.category}",
+                    text = "${stringResource(R.string.birthdate)}: ${player.birthdate}",
                     style = MaterialTheme.typography.bodyLarge
                 )
                 Text(
-                    text = "${stringResource(R.string.league)}: ${team.league ?: "N/A"}",
+                    text = "${stringResource(R.string.email)}: ${player.email}",
                     style = MaterialTheme.typography.bodyLarge
                 )
                 Text(
-                    text = "${stringResource(R.string.player_count)}: ${team.playerCount}",
+                    text = "${stringResource(R.string.phone)}: ${player.telephone}",
+                    style = MaterialTheme.typography.bodyLarge
+                )
+                Text(
+                    text = "${stringResource(R.string.category)}: ${player.category}",
+                    style = MaterialTheme.typography.bodyLarge
+                )
+                Text(
+                    text = "${stringResource(R.string.team_name)}: ${player.team?.name ?: "N/A"}",
                     style = MaterialTheme.typography.bodyLarge
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -132,7 +134,7 @@ fun TeamDetailScreen(teamId: Int, navController: NavHostController) {
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Button(
-                        onClick = { navController.navigate("addEditTeamScreen/${team.teamId}") },
+                        onClick = { navController.navigate("addEditPlayerScreen/${player.playerId}") },
                         modifier = Modifier.weight(1f)
                     ) {
                         Text(stringResource(R.string.edit))
@@ -142,12 +144,12 @@ fun TeamDetailScreen(teamId: Int, navController: NavHostController) {
                         onClick = {
                             scope.launch {
                                 try {
-                                    val response = ApiClient.teamApi.deleteTeam(team.teamId)
+                                    val response = ApiClient.playerApi.deletePlayer(player.playerId)
                                     if (response.isSuccessful) {
-                                        Toast.makeText(context, R.string.team_deleted, Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(context, R.string.player_deleted, Toast.LENGTH_SHORT).show()
                                         navController.popBackStack()
                                     } else {
-                                        Toast.makeText(context, R.string.error_deleting_team, Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(context, R.string.error_deleting_player, Toast.LENGTH_SHORT).show()
                                     }
                                 } catch (e: Exception) {
                                     Toast.makeText(context, "${R.string.connection_error}: ${e.message}", Toast.LENGTH_SHORT).show()
@@ -161,14 +163,5 @@ fun TeamDetailScreen(teamId: Int, navController: NavHostController) {
                 }
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun TeamDetailScreenPreview() {
-    val fakeNavController = rememberNavController()
-    MyBasketTrainerTheme {
-        TeamDetailScreen(teamId = 1, navController = fakeNavController)
     }
 }

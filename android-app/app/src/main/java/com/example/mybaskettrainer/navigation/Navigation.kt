@@ -4,13 +4,17 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.mybaskettrainer.ui.screens.AddEditPlayerScreen
 import com.example.mybaskettrainer.ui.screens.AddEditTeamScreen
 import com.example.mybaskettrainer.ui.screens.LoginScreen
 import com.example.mybaskettrainer.ui.screens.MainScreen
+import com.example.mybaskettrainer.ui.screens.PlayerDetailScreen
 import com.example.mybaskettrainer.ui.screens.RegisterScreen
 import com.example.mybaskettrainer.ui.screens.SplashScreen
 import com.example.mybaskettrainer.ui.screens.TeamDetailScreen
 import com.example.mybaskettrainer.ui.screens.TeamsScreen
+import com.example.mybaskettrainer.ui.screens.PlayersScreen
+
 
 @Composable
 fun Navigation(
@@ -48,6 +52,26 @@ fun Navigation(
             backStackEntry ->
             val teamId = backStackEntry.arguments?.getString("teamId")
             AddEditTeamScreen(teamId, navController)
+        }
+
+        composable(Routes.PlayerScreen.route) {
+            PlayersScreen(navController)
+        }
+
+        composable("${Routes.PlayerDetailScreen.route}/{playerId}") {
+                backStackEntry ->
+            val playerId = backStackEntry.arguments?.getString("playerId")?.toInt() ?: 0
+            PlayerDetailScreen(playerId, navController)
+        }
+
+        composable(Routes.AddEditPlayerScreen.route) {
+            AddEditPlayerScreen(navController = navController)
+        }
+
+        composable("${Routes.AddEditPlayerScreen.route}/{playerId}") {
+                backStackEntry ->
+            val playerId = backStackEntry.arguments?.getString("playerId")
+            AddEditPlayerScreen(playerId, navController)
         }
 
 
