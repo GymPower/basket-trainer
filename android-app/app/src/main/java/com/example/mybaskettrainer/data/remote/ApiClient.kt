@@ -23,5 +23,10 @@ object ApiClient {
     }
 
 
+    val playerApi: PlayerApi by lazy {
+        retrofit.create(PlayerApi::class.java)
+    }
+
+
 
 }
