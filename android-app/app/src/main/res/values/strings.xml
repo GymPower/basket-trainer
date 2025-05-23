@@ -54,6 +54,17 @@
     <string name="save">Save</string>
     <string name="create">Create</string>
 
-
+    //PlayerScreen
+    <string name="error_loading_players">Error loading players</string>
+    <string name="add_player">Add Player</string>
+    <string name="search_by_name">Search by name</string>
+    <string name="filter_by_category">Filter by category</string>
+    <string name="filter_by_team">Filter by team</string>
+    <string name="no_players">No players found</string>
+    <string name="error_loading_player">Error loading player</string>
+    <string name="player_details">Player Details</string>
+    <string name="player_not_found">Player not found</string>
+    <string name="player_deleted">Player deleted</string>
+    <string name="error_deleting_player">Error deleting player</string>
 
 </resources>

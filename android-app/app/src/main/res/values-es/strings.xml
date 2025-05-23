@@ -56,6 +56,17 @@
     <string name="save">Guardar</string>
     <string name="create">Crear</string>
 
-
+    //PlayerScreen
+    <string name="error_loading_players">Error cargando jugadores</string>
+    <string name="add_player">Añadir jugador</string>
+    <string name="search_by_name">Buscar por nombre</string>
+    <string name="filter_by_category">Filtrar por categoría</string>
+    <string name="filter_by_team">Filtrar por equipo</string>
+    <string name="no_players">Jugadores no encontrados</string>
+    <string name="error_loading_player">Error cargando el jugador</string>
+    <string name="player_details">Detalles del jugador</string>
+    <string name="player_not_found">Jugador no encontrado</string>
+    <string name="player_deleted">Jugador borrado</string>
+    <string name="error_deleting_player">Error borrando jugador</string>
 
 </resources>
