@@ -30,11 +30,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.mybaskettrainer.data.model.Player
 import com.example.mybaskettrainer.data.model.Team
 import com.example.mybaskettrainer.data.remote.ApiClient
+import com.example.mybaskettrainer.ui.theme.MyBasketTrainerTheme
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
@@ -80,7 +83,7 @@ fun AddEditPlayerScreen(playerId: String? = null, navController: NavHostControll
         if (isEditMode) {
             isLoading.value = true
             try {
-                val response = ApiClient.playerApi.getPlayers()
+                val response = ApiClient.playerApi.getPlayersByTrainer("DNI de entrenador")//TODO meter el dni del trainer
                 val player = response.body()?.find { it.playerId == parsedPlayerId }
                 if (response.isSuccessful && player != null) {
                     name.value = player.name
@@ -264,7 +267,7 @@ suspend fun saveOrUpdatePlayer(
         val response = if (isEditMode) {
             ApiClient.playerApi.updatePlayer(playerId!!, player)
         } else {
-            ApiClient.playerApi.createPlayer(player)
+            ApiClient.playerApi.createPlayer("Dni trainer", player)
         }
         if (response.isSuccessful) {
             Toast.makeText(
@@ -282,5 +285,15 @@ suspend fun saveOrUpdatePlayer(
         }
     } catch (e: Exception) {
         Toast.makeText(context, "Connection error: ${e.message}", Toast.LENGTH_SHORT).show()
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Preview(showBackground = true)
+@Composable
+fun AddEditPlayerScreenPreview() {
+    val fakeNavController = rememberNavController()
+    MyBasketTrainerTheme {
+        AddEditPlayerScreen(navController = fakeNavController)
     }
 }

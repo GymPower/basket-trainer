@@ -30,11 +30,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.mybaskettrainer.R
 import com.example.mybaskettrainer.data.model.Player
 import com.example.mybaskettrainer.data.remote.ApiClient
+import com.example.mybaskettrainer.ui.theme.MyBasketTrainerTheme
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,7 +51,7 @@ fun PlayerDetailScreen(playerId: Int, navController: NavHostController) {
     LaunchedEffect(playerId) {
         isLoading.value = true
         try {
-            val response = ApiClient.playerApi.getPlayers()
+            val response = ApiClient.playerApi.getPlayersByTrainer("Dni trainer")
             if (response.isSuccessful) {
                 playerState.value = response.body()?.find { it.playerId == playerId }
             } else {
@@ -163,5 +166,14 @@ fun PlayerDetailScreen(playerId: Int, navController: NavHostController) {
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PlayerDetailScreenPreview() {
+    val fakeNavController = rememberNavController()
+    MyBasketTrainerTheme {
+        PlayerDetailScreen(playerId = 1, navController = fakeNavController)
     }
 }

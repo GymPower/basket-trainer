@@ -40,11 +40,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.mybaskettrainer.R
 import com.example.mybaskettrainer.data.model.Player
 import com.example.mybaskettrainer.data.remote.ApiClient
+import com.example.mybaskettrainer.ui.theme.MyBasketTrainerTheme
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -62,9 +65,9 @@ fun PlayersScreen(navController: NavHostController) {
     LaunchedEffect(Unit) {
         isLoading.value = true
         try {
-            val response = ApiClient.playerApi.getPlayers()
+            val response = ApiClient.playerApi.getPlayersByTrainer("meter dni entrenador")
             if (response.isSuccessful) {
-                playersState.value = response.body()?.sortedBy { it.lastName } ?: emptyList()
+                playersState.value = response.body()?.sortedBy { it.firstSurname } ?: emptyList()
             } else {
                 Toast.makeText(context, R.string.error_loading_players, Toast.LENGTH_SHORT).show()
             }
@@ -76,19 +79,19 @@ fun PlayersScreen(navController: NavHostController) {
 
     // Filtrar jugadores según los criterios de búsqueda
     val filteredPlayers = playersState.value.filter { player ->
-        val matchesName = player.firstName.contains(searchQuery, ignoreCase = true) ||
-                player.lastName.contains(searchQuery, ignoreCase = true)
-        val matchesCategory = if (categoryFilter.isEmpty()) true else player.category.contains(categoryFilter, ignoreCase = true)
-        val matchesTeam = if (teamFilter.isEmpty()) true else player.teamName?.contains(teamFilter, ignoreCase = true) ?: false
-        matchesName && matchesCategory && matchesTeam
-    }.sortedBy { it.lastName }
+        val matchesName = player.name.contains(searchQuery, ignoreCase = true) ||
+                player.firstSurname.contains(searchQuery, ignoreCase = true)
+        val matchesCategory = if (categoryFilter.isEmpty()) true else player.category?.contains(categoryFilter, ignoreCase = true)
+        val matchesTeam = if (teamFilter.isEmpty()) true else player.team?.name?.contains(teamFilter, ignoreCase = true) ?: false
+        matchesName && matchesCategory == true && matchesTeam
+    }.sortedBy { it.firstSurname }
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(R.string.my_players)) },
                 navigationIcon = {
-                    IconButton(onClick = { /* Abrir menú hamburguesa - Implementar si es necesario */ }) {
+                    IconButton(onClick = { }) {
                         Icon(Icons.Filled.Menu, contentDescription = "Menu")
                     }
                 }
@@ -215,10 +218,18 @@ fun PlayerCard(player: Player, onClick: () -> Unit) {
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Text(
-                    text = "${stringResource(R.string.team)}: ${player.team?.name ?: "N/A"}",
+                    text = "${stringResource(R.string.team_name)}: ${player.team?.name ?: "N/A"}",
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
         }
+    }
+}
+@Preview(showBackground = true)
+@Composable
+fun PlayerScreenPreview() {
+    val fakeNavController = rememberNavController()
+    MyBasketTrainerTheme {
+        PlayersScreen(navController = fakeNavController)
     }
 }

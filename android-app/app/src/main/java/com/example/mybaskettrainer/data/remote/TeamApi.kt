@@ -18,7 +18,7 @@ interface TeamApi {
     suspend fun createTeam(@Path("trainerDni") trainerDni: String, @Body team: Team): Response<Team>
 
     @PUT("api/teams/{id}")
-    suspend fun updateTeam(@Path("id") id: Long, @Body team: Team): Response<Team>
+    suspend fun updateTeam(@Path("id") id: Int, @Body team: Team): Response<Team>
 
     @DELETE("api/teams/{id}")
     suspend fun deleteTeam(@Path("id") id: Long): Response<Unit>

@@ -46,7 +46,7 @@ fun AddEditTeamScreen(teamId: String? = null, navController: NavHostController) 
     val category = remember { mutableStateOf("") }
     val league = remember { mutableStateOf("") }
     val isLoading = remember { mutableStateOf(false) }
-
+    val trainerDni = remember { mutableStateOf("") }
     val parsedTeamId = teamId?.toIntOrNull()
     val isEditMode = parsedTeamId != null
 
@@ -171,7 +171,6 @@ fun AddEditTeamScreen(teamId: String? = null, navController: NavHostController) 
     }
 }
 
-// Función suspendida para manejar la lógica de guardado/actualización
 suspend fun saveOrUpdateTeam(
     context: Context,
     isEditMode: Boolean,
@@ -192,7 +191,8 @@ suspend fun saveOrUpdateTeam(
         val response = if (isEditMode) {
             ApiClient.teamApi.updateTeam(teamId!!, team)
         } else {
-            ApiClient.teamApi.createTeam(team)
+
+            ApiClient.teamApi.createTeam("trainerDni", team)
         }
         if (response.isSuccessful) {
             Toast.makeText(
