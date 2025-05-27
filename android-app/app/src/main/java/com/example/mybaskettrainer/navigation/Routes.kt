@@ -14,6 +14,7 @@ sealed class Routes(val route: String) {
     object AgendaScreen : Routes("agenda_screen")
     object AddEditEventScreen : Routes("add_edit_event_screen")
     object EventDetailScreen : Routes("event_detail_screen")
+    object ScoreboardScreen : Routes("scoreboard_screen")
 
 
 }

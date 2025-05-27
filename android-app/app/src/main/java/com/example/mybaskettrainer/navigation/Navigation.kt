@@ -17,6 +17,7 @@ import com.example.mybaskettrainer.ui.screens.SplashScreen
 import com.example.mybaskettrainer.ui.screens.TeamDetailScreen
 import com.example.mybaskettrainer.ui.screens.TeamsScreen
 import com.example.mybaskettrainer.ui.screens.PlayersScreen
+import com.example.mybaskettrainer.ui.screens.ScoreboardScreen
 
 
 @Composable
@@ -94,6 +95,10 @@ fun Navigation(
                 eventId = backStackEntry.arguments?.getString("eventId") ?: "",
                 navController = navController
             )
+        }
+
+        composable(Routes.ScoreboardScreen.route) {
+            ScoreboardScreen(navController = navController)
         }
 
 
