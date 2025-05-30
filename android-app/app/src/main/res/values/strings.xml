@@ -1,4 +1,8 @@
 <resources>
+    <string name="main_screen">Main screen</string>
+    <string name="teams">Teams</string>
+    <string name="players">Players</string>
+    <string name="tactics_board">TableBoard</string>
     <string name="app_name">MyBasketTrainer</string>
     <string name="welcome_message">Welcome to BasketTrainer</string>
     <string name="login">Login</string>

@@ -3,7 +3,9 @@ package com.example.mybaskettrainer.ui.screens
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
+import android.os.Build
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,8 +16,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.CalendarToday
-import androidx.compose.material.icons.filled.Schedule
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Create
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -32,10 +34,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.mybaskettrainer.data.local.EventStorage
 import com.example.mybaskettrainer.data.model.Event
+import com.example.mybaskettrainer.ui.theme.MyBasketTrainerTheme
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
@@ -184,7 +189,7 @@ fun AddEditEventScreen(eventId: String? = null, navController: NavHostController
                         enabled = false
                     )
                     IconButton(onClick = { datePickerDialog.show() }) {
-                        Icon(Icons.Filled.CalendarToday, contentDescription = "Pick Date")
+                        Icon(Icons.Filled.DateRange, contentDescription = "Pick Date")
                     }
                 }
                 Row(
@@ -200,7 +205,7 @@ fun AddEditEventScreen(eventId: String? = null, navController: NavHostController
                         enabled = false
                     )
                     IconButton(onClick = { timePickerDialog.show() }) {
-                        Icon(Icons.Filled.Schedule, contentDescription = "Pick Time")
+                        Icon(Icons.Filled.Create, contentDescription = "Pick Time")
                     }
                 }
                 Spacer(modifier = Modifier.height(16.dp))
@@ -250,18 +255,17 @@ suspend fun saveOrUpdateEvent(
     navController: NavHostController
 ) {
     try {
-// Validar formato de fecha y hora (básico)
-        if (!date.matches(Regex("\d{2}/\d{2}/\d{4}"))) {
+        //validator
+        if (!date.matches(Regex("\\d{2}/\\d{2}/\\d{4}"))) {
             Toast.makeText(context, "Invalid date format (use dd/MM/yyyy)", Toast.LENGTH_SHORT)
                 .show()
             return
         }
-        if (!time.matches(Regex("\d{2}:\d{2}"))) {
+        if (!time.matches(Regex("\\d{2}:\\d{2}"))) {
             Toast.makeText(context, "Invalid time format (use HH:mm)", Toast.LENGTH_SHORT).show()
             return
         }
 
-// Crear o actualizar el evento
         val event = Event(
             id = if (isEditMode) eventId!! else EventStorage.generateEventId(),
             name = name,
@@ -281,5 +285,14 @@ suspend fun saveOrUpdateEvent(
         navController.popBackStack()
     } catch (e: Exception) {
         Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun AddEditEventScreenPreview() {
+    val fakeNavController = rememberNavController()
+    MyBasketTrainerTheme {
+        AddEditEventScreen(navController = fakeNavController)
     }
 }

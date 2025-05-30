@@ -16,11 +16,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -36,10 +39,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.mybaskettrainer.data.local.EventStorage
 import com.example.mybaskettrainer.data.model.Event
+import com.example.mybaskettrainer.ui.theme.MyBasketTrainerTheme
 
 
 @SuppressLint("RememberReturnType")
@@ -47,15 +53,81 @@ import com.example.mybaskettrainer.data.model.Event
 @Composable
 fun AgendaScreen(navController: NavHostController) {
     val context = LocalContext.current
-    var events by remember { mutableStateOf(EventStorage.getEvents().sortedByDate()) }
+    var events by remember { mutableStateOf(EventStorage.getEvents()) }
+    var menuExpanded by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("Agenda") },
                 navigationIcon = {
-                    IconButton(onClick = { }) {
-                        Icon(Icons.Filled.Menu, contentDescription = "Menu")
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(Icons.Filled.ArrowBack, contentDescription = "Volver")
+                    }
+                },
+                actions = {
+                    IconButton(onClick = { menuExpanded = true }) {
+                        Icon(Icons.Filled.Menu, contentDescription = "Menú")
+                    }
+                    DropdownMenu(
+                        expanded = menuExpanded,
+                        onDismissRequest = { menuExpanded = false }
+                    ) {
+                        DropdownMenuItem(
+                            text = { Text("Pantalla Principal") },
+                            onClick = {
+                                navController.navigate("main_screen") {
+                                    popUpTo(navController.graph.startDestinationId) { inclusive = false }
+                                    launchSingleTop = true
+                                }
+                                menuExpanded = false
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Equipos") },
+                            onClick = {
+                                navController.navigate("team_screen") {
+                                    popUpTo(navController.graph.startDestinationId) { inclusive = false }
+                                    launchSingleTop = true
+                                }
+                                menuExpanded = false
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Jugadores") },
+                            onClick = {
+                                navController.navigate("player_screen") {
+                                    popUpTo(navController.graph.startDestinationId) { inclusive = false }
+                                    launchSingleTop = true
+                                }
+                                menuExpanded = false
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Agenda") },
+                            enabled = false,
+                            onClick = {}
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Marcador") },
+                            onClick = {
+                                navController.navigate("scoreboard_screen") {
+                                    popUpTo(navController.graph.startDestinationId) { inclusive = false }
+                                    launchSingleTop = true
+                                }
+                                menuExpanded = false
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Pizarra Táctica") },
+                            onClick = {
+                                navController.navigate("tactics_board") {
+                                    popUpTo(navController.graph.startDestinationId) { inclusive = false }
+                                    launchSingleTop = true
+                                }
+                                menuExpanded = false
+                            }
+                        )
                     }
                 }
             )
@@ -104,7 +176,7 @@ fun AgendaScreen(navController: NavHostController) {
                             onEdit = { navController.navigate("addEditEventScreen/${event.id}") },
                             onDelete = {
                                 EventStorage.deleteEvent(event.id)
-                                events = EventStorage.getEvents().sortedByDate()
+                                events = EventStorage.getEvents()
                                 Toast.makeText(context, "Event deleted", Toast.LENGTH_SHORT).show()
                             }
                         )
@@ -161,11 +233,11 @@ fun EventCard(
     }
 }
 
-// Función para ordenar eventos por fecha (formato "dd/MM/yyyy")
-fun List<event>.sortedByDate(): List<event> {
-    return sortedWith(compareBy { event ->
-        val parts = event.date.split("/")
-// Convertir a un formato comparable (yyyyMMdd)
-        "${parts[2]}${parts[1].padStart(2, '0')}${parts[0].padStart(2, '0')}".toInt()
-    })
-}</event></event>
+@Preview(showBackground = true)
+@Composable
+fun AgendaScreenPreview() {
+    val fakeNavController = rememberNavController()
+    MyBasketTrainerTheme {
+        AgendaScreen(navController = fakeNavController)
+    }
+}
