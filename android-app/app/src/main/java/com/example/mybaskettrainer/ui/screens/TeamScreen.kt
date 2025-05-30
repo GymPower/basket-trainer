@@ -17,11 +17,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -35,6 +38,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -58,8 +62,8 @@ fun TeamsScreen(navController: NavHostController) {
     val scope = rememberCoroutineScope()
     val teamsState = remember { mutableStateOf<List<Team>>(emptyList()) }
     val isLoading = remember { mutableStateOf(true) }
+    var menuExpanded by remember { mutableStateOf(false) }
 
-    // Cargar equipos al iniciar
     LaunchedEffect(Unit) {
         isLoading.value = true
         try {
@@ -76,25 +80,90 @@ fun TeamsScreen(navController: NavHostController) {
     }
 
     Scaffold(
+
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(R.string.my_teams)) },
+                title = { Text("Pizarra Táctica") },
                 navigationIcon = {
-                    IconButton(onClick = { /* Abrir menú hamburguesa - Implementar si es necesario */ }) {
-                        Icon(Icons.Filled.Menu, contentDescription = "Menu")
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(Icons.Filled.ArrowBack, contentDescription = "Volver")
                     }
+                },
+                actions = {
+                    IconButton(onClick = { menuExpanded = true }) {
+                        Icon(Icons.Filled.Menu, contentDescription = "Menú")
+                    }
+                    DropdownMenu(
+                        expanded = menuExpanded,
+                        onDismissRequest = { menuExpanded = false }
+                    ) {
+                        DropdownMenuItem(
+                            text = { Text("Pantalla Principal") },
+                            onClick = {
+                                navController.navigate("main_screen") {
+                                    popUpTo(navController.graph.startDestinationId) {
+                                        inclusive = false
+                                    }
+                                    launchSingleTop = true
+                                }
+                                menuExpanded = false
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Equipos") },
+                            enabled = false,
+                            onClick = {}
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Jugadores") },
+                            onClick = {
+                                navController.navigate("player_screen") {
+                                    popUpTo(navController.graph.startDestinationId) {
+                                        inclusive = false
+                                    }
+                                    launchSingleTop = true
+                                }
+                                menuExpanded = false
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Agenda") },
+                            onClick = {
+                                navController.navigate("agenda_screen") {
+                                    popUpTo(navController.graph.startDestinationId) {
+                                        inclusive = false
+                                    }
+                                    launchSingleTop = true
+                                }
+                                menuExpanded = false
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Marcador") },
+                            onClick = {
+                                navController.navigate("scoreboard_screen") {
+                                    popUpTo(navController.graph.startDestinationId) {
+                                        inclusive = false
+                                    }
+                                    launchSingleTop = true
+                                }
+                                menuExpanded = false
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Pizarra Táctica") },
+                            onClick = {
+                                navController.navigate("tactics_board") {
+                                    popUpTo(navController.graph.startDestinationId) { inclusive = false }
+                                    launchSingleTop = true
+                                }
+                                menuExpanded = false
+                            }
+                        )
+                    }
+
                 }
             )
-        },
-        floatingActionButton = {
-            Button(
-                onClick = { navController.navigate("addEditTeamScreen") },
-                modifier = Modifier.padding(16.dp)
-            ) {
-                Icon(Icons.Filled.Add, contentDescription = "Add Team")
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(stringResource(R.string.add_team))
-            }
         }
     ) { paddingValues ->
         if (isLoading.value) {

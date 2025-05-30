@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="main_screen">Pantalla Principal</string>
+    <string name="teams">Equipos</string>
+    <string name="players">Jugadores</string>
+    <string name="agenda">Agenda</string>
+    <string name="scoreboard">Marcador</string>
+    <string name="tactics_board">Pizarra Táctica</string>
     <string name="app_name">MyBasketTrainer</string>
     <string name="welcome_message">Bienvenido a BasketTrainer</string>
     <string name="login">Iniciar sesión</string>

@@ -16,10 +16,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -60,8 +63,8 @@ fun PlayersScreen(navController: NavHostController) {
     var searchQuery by remember { mutableStateOf("") }
     var categoryFilter by remember { mutableStateOf("") }
     var teamFilter by remember { mutableStateOf("") }
+    var menuExpanded by remember { mutableStateOf(false) }
 
-    // Cargar jugadores al iniciar
     LaunchedEffect(Unit) {
         isLoading.value = true
         try {
@@ -91,8 +94,74 @@ fun PlayersScreen(navController: NavHostController) {
             TopAppBar(
                 title = { Text(stringResource(R.string.my_players)) },
                 navigationIcon = {
-                    IconButton(onClick = { }) {
-                        Icon(Icons.Filled.Menu, contentDescription = "Menu")
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(Icons.Filled.ArrowBack, contentDescription = "Volver")
+                    }
+                },
+                actions = {
+                    IconButton(onClick = { menuExpanded = true }) {
+                        Icon(Icons.Filled.Menu, contentDescription = "Menú")
+                    }
+// Menú desplegable
+                    DropdownMenu(
+                        expanded = menuExpanded,
+                        onDismissRequest = { menuExpanded = false }
+                    ) {
+                        DropdownMenuItem(
+                            text = { Text("Pantalla Principal") },
+                            onClick = {
+                                navController.navigate("main_screen") {
+                                    popUpTo(navController.graph.startDestinationId) { inclusive = false }
+                                    launchSingleTop = true
+                                }
+                                menuExpanded = false
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Equipos") },
+                            onClick = {
+                                navController.navigate("team_screen") {
+                                    popUpTo(navController.graph.startDestinationId) { inclusive = false }
+                                    launchSingleTop = true
+                                }
+                                menuExpanded = false
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Jugadores") },
+                            enabled = false,
+                            onClick = {}
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Agenda") },
+                            onClick = {
+                                navController.navigate("agenda_screen") {
+                                    popUpTo(navController.graph.startDestinationId) { inclusive = false }
+                                    launchSingleTop = true
+                                }
+                                menuExpanded = false
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Marcador") },
+                            onClick = {
+                                navController.navigate("scoreboard_screen") {
+                                    popUpTo(navController.graph.startDestinationId) { inclusive = false }
+                                    launchSingleTop = true
+                                }
+                                menuExpanded = false
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Pizarra Táctica") },
+                            onClick = {
+                                navController.navigate("tactics_board") {
+                                    popUpTo(navController.graph.startDestinationId) { inclusive = false }
+                                    launchSingleTop = true
+                                }
+                                menuExpanded = false
+                            }
+                        )
                     }
                 }
             )
