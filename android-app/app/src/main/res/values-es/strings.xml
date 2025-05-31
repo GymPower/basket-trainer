@@ -3,8 +3,6 @@
     <string name="main_screen">Pantalla Principal</string>
     <string name="teams">Equipos</string>
     <string name="players">Jugadores</string>
-    <string name="agenda">Agenda</string>
-    <string name="scoreboard">Marcador</string>
     <string name="tactics_board">Pizarra Táctica</string>
     <string name="app_name">MyBasketTrainer</string>
     <string name="welcome_message">Bienvenido a BasketTrainer</string>
@@ -17,6 +15,9 @@
     <string name="registered">Registrado</string>
     <string name="user_wrong">Usuario o contraseña incorrectos</string>
     <string name="connection_error">Error de conexión:</string>
+    <string name="back">Atrás</string>
+    <string name="loading">Cargando</string>
+
 
     //RegisterScreen
     <string name="trainer_register">Registro de Entrenador</string>
@@ -74,5 +75,28 @@
     <string name="player_not_found">Jugador no encontrado</string>
     <string name="player_deleted">Jugador borrado</string>
     <string name="error_deleting_player">Error borrando jugador</string>
+
+
+    //AgendaScreen
+    <string name="edit_event">Editar Evento</string>
+    <string name="add_event">Añadir Evento</string>
+    <string name="description">Descripción</string>
+    <string name="adress">Dirección</string>
+    <string name="date_style">Fecha (dd/MM/yyyy)</string>
+    <string name="pick_date">Selecciona Fecha</string>
+    <string name="hour_style">Hora (HH:mm)</string>
+    <string name="pick_time">Selecciona Hora</string>
+    <string name="event_error">Nombre, Fecha y Hora necesarios</string>
+    <string name="event_created">Evento creado</string>
+    <string name="event_updated">Event actualizado</string>
+
+
+
+    //Error
+    <string name="error_event_id">Id inválido del evento</string>
+    <string name="go_back">Ir atrás</string>
+    <string name="event_not_found">Evento no encontrado</string>
+
+
 
 </resources>

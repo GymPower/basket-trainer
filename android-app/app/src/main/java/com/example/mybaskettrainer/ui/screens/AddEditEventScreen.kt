@@ -34,10 +34,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.mybaskettrainer.R
 import com.example.mybaskettrainer.data.local.EventStorage
 import com.example.mybaskettrainer.data.model.Event
 import com.example.mybaskettrainer.ui.theme.MyBasketTrainerTheme
@@ -66,13 +68,13 @@ fun AddEditEventScreen(eventId: String? = null, navController: NavHostController
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Invalid Event ID",
+                text = stringResource(id = R.string.error_event_id),
                 style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.error
             )
             Spacer(modifier = Modifier.height(16.dp))
             Button(onClick = { navController.popBackStack() }) {
-                Text("Go Back")
+                Text(text = stringResource(id = R.string.go_back))
             }
         }
         return
@@ -88,7 +90,7 @@ fun AddEditEventScreen(eventId: String? = null, navController: NavHostController
             date.value = event.date
             time.value = event.time
         } else {
-            Toast.makeText(context, "Event not found", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, stringResource(id = R.string.event_not_found), Toast.LENGTH_SHORT).show()
             navController.popBackStack()
             return
         }
@@ -129,10 +131,10 @@ fun AddEditEventScreen(eventId: String? = null, navController: NavHostController
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(if (isEditMode) "Edit Event" else "Add Event") },
+                title = { Text(if (isEditMode) stringResource(R.string.edit_event) else stringResource(R.string.add_event) ) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
                     }
                 }
             )
@@ -146,7 +148,7 @@ fun AddEditEventScreen(eventId: String? = null, navController: NavHostController
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = "Loading")
+                Text(text = stringResource(R.string.loading))
             }
         } else {
             Column(
@@ -159,20 +161,20 @@ fun AddEditEventScreen(eventId: String? = null, navController: NavHostController
                 OutlinedTextField(
                     value = name.value,
                     onValueChange = { name.value = it },
-                    label = { Text("Name") },
+                    label = { Text(stringResource(R.string.name)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )
                 OutlinedTextField(
                     value = description.value,
                     onValueChange = { description.value = it },
-                    label = { Text("Description") },
+                    label = { Text(stringResource(R.string.description)) },
                     modifier = Modifier.fillMaxWidth()
                 )
                 OutlinedTextField(
                     value = address.value,
                     onValueChange = { address.value = it },
-                    label = { Text("Address") },
+                    label = { Text(stringResource(R.string.adress)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )
@@ -183,13 +185,13 @@ fun AddEditEventScreen(eventId: String? = null, navController: NavHostController
                     OutlinedTextField(
                         value = date.value,
                         onValueChange = { },
-                        label = { Text("Date (dd/MM/yyyy)") },
+                        label = { Text(stringResource(R.string.date_style)) },
                         modifier = Modifier.weight(1f),
                         readOnly = true,
                         enabled = false
                     )
                     IconButton(onClick = { datePickerDialog.show() }) {
-                        Icon(Icons.Filled.DateRange, contentDescription = "Pick Date")
+                        Icon(Icons.Filled.DateRange, contentDescription = stringResource(R.string.pick_date))
                     }
                 }
                 Row(
@@ -199,13 +201,13 @@ fun AddEditEventScreen(eventId: String? = null, navController: NavHostController
                     OutlinedTextField(
                         value = time.value,
                         onValueChange = { },
-                        label = { Text("Time (HH:mm)") },
+                        label = { Text(stringResource(R.string.hour_style)) },
                         modifier = Modifier.weight(1f),
                         readOnly = true,
                         enabled = false
                     )
                     IconButton(onClick = { timePickerDialog.show() }) {
-                        Icon(Icons.Filled.Create, contentDescription = "Pick Time")
+                        Icon(Icons.Filled.Create, contentDescription = stringResource(R.string.pick_time))
                     }
                 }
                 Spacer(modifier = Modifier.height(16.dp))
@@ -236,7 +238,7 @@ fun AddEditEventScreen(eventId: String? = null, navController: NavHostController
                     modifier = Modifier.fillMaxWidth(),
                     enabled = !isLoading.value
                 ) {
-                    Text(if (isEditMode) "Save" else "Create")
+                    Text(if (isEditMode) stringResource(R.string.save) else stringResource(R.string.create))
                 }
             }
         }

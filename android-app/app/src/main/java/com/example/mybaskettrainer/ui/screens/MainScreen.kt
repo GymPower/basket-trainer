@@ -1,6 +1,9 @@
 package com.example.mybaskettrainer.ui.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -18,16 +21,10 @@ import androidx.navigation.compose.rememberNavController
 import com.example.mybaskettrainer.R
 import com.example.mybaskettrainer.ui.theme.MyBasketTrainerTheme
 import kotlinx.coroutines.launch
-import androidx.compose.material.icons.filled.List
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.ExitToApp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(navController: NavHostController) {
+fun MainScreen(navController: NavHostController, trainerDni: String) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
@@ -46,7 +43,7 @@ fun MainScreen(navController: NavHostController) {
                     selected = false,
                     onClick = {
                         scope.launch { drawerState.close() }
-                        navController.navigate("team_screen") {
+                        navController.navigate("teamScreen/$trainerDni") {
                             popUpTo(navController.graph.startDestinationId) { inclusive = false }
                             launchSingleTop = true
                         }
@@ -58,7 +55,7 @@ fun MainScreen(navController: NavHostController) {
                     selected = false,
                     onClick = {
                         scope.launch { drawerState.close() }
-                        navController.navigate("player_screen") {
+                        navController.navigate("playerScreen/$trainerDni") {
                             popUpTo(navController.graph.startDestinationId) { inclusive = false }
                             launchSingleTop = true
                         }
@@ -141,18 +138,108 @@ fun MainScreen(navController: NavHostController) {
                     textAlign = TextAlign.Center
                 )
                 Spacer(modifier = Modifier.height(32.dp))
-                Text(
-                    text = "Próximo evento: [En desarrollo]",
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontSize = 18.sp
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    text = "Selección de equipos: [En desarrollo]",
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontSize = 18.sp
-                )
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    item {
+                        MenuIcon(
+                            icon = Icons.Filled.List,
+                            label = stringResource(R.string.my_teams),
+                            onClick = {
+                                navController.navigate("teamScreen/$trainerDni") {
+                                    popUpTo(navController.graph.startDestinationId) { inclusive = false }
+                                    launchSingleTop = true
+                                }
+                            }
+                        )
+                    }
+                    item {
+                        MenuIcon(
+                            icon = Icons.Filled.Person,
+                            label = stringResource(R.string.my_players),
+                            onClick = {
+                                navController.navigate("playerScreen/$trainerDni") {
+                                    popUpTo(navController.graph.startDestinationId) { inclusive = false }
+                                    launchSingleTop = true
+                                }
+                            }
+                        )
+                    }
+                    item {
+                        MenuIcon(
+                            icon = Icons.Filled.DateRange,
+                            label = stringResource(R.string.agenda),
+                            onClick = {
+                                navController.navigate("agenda_screen") {
+                                    popUpTo(navController.graph.startDestinationId) { inclusive = false }
+                                    launchSingleTop = true
+                                }
+                            }
+                        )
+                    }
+                    item {
+                        MenuIcon(
+                            icon = Icons.Filled.Edit,
+                            label = stringResource(R.string.playbook),
+                            onClick = {
+                                navController.navigate("tactics_board") {
+                                    popUpTo(navController.graph.startDestinationId) { inclusive = false }
+                                    launchSingleTop = true
+                                }
+                            }
+                        )
+                    }
+                    item {
+                        MenuIcon(
+                            icon = Icons.Filled.Home,
+                            label = stringResource(R.string.scoreboard),
+                            onClick = {
+                                navController.navigate("scoreboard_screen") {
+                                    popUpTo(navController.graph.startDestinationId) { inclusive = false }
+                                    launchSingleTop = true
+                                }
+                            }
+                        )
+                    }
+                }
             }
+        }
+    }
+}
+
+@Composable
+fun MenuIcon(
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    label: String,
+    onClick: () -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .clickable(onClick = onClick)
+            .padding(8.dp)
+            .height(120.dp)
+            .width(120.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = label,
+                modifier = Modifier.size(48.dp)
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = label,
+                style = MaterialTheme.typography.bodyLarge,
+                textAlign = TextAlign.Center
+            )
         }
     }
 }
@@ -163,7 +250,6 @@ fun MainScreen(navController: NavHostController) {
 fun MainScreenPreview() {
     val fakeNavController = rememberNavController()
     MyBasketTrainerTheme {
-        MainScreen(navController = fakeNavController)
+        MainScreen(navController = fakeNavController, trainerDni = "12345678A")
     }
 }
-

@@ -3,7 +3,7 @@ package com.example.mybaskettrainer.data.local
 import com.example.mybaskettrainer.data.model.Event
 
 object EventStorage {
-    private val events = mutableListOf()
+    private val events: MutableList<Event> = mutableListOf()
     private var nextId = 1
 
     fun getEvents(): List<Event> = events.toList()
