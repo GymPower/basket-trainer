@@ -39,14 +39,13 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddEditTeamScreen(teamId: String? = null, navController: NavHostController) {
+fun AddEditTeamScreen(teamId: String? = null, trainerDni: String = "12345678Z", navController: NavHostController) { // Añadido trainerDni como parámetro opcional
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val name = remember { mutableStateOf("") }
     val category = remember { mutableStateOf("") }
     val league = remember { mutableStateOf("") }
     val isLoading = remember { mutableStateOf(false) }
-    val trainerDni = remember { mutableStateOf("") }
     val parsedTeamId = teamId?.toIntOrNull()
     val isEditMode = parsedTeamId != null
 
@@ -73,7 +72,7 @@ fun AddEditTeamScreen(teamId: String? = null, navController: NavHostController) 
         if (isEditMode) {
             isLoading.value = true
             try {
-                val response = ApiClient.teamApi.getTeams()
+                val response = ApiClient.teamApi.getTeamsByTrainer(trainerDni) // Usar getTeamsByTrainer
                 val team = response.body()?.find { it.teamId == parsedTeamId }
                 if (response.isSuccessful && team != null) {
                     name.value = team.name
@@ -156,6 +155,7 @@ fun AddEditTeamScreen(teamId: String? = null, navController: NavHostController) 
                                 name = name.value,
                                 category = category.value,
                                 league = league.value,
+                                trainerDni = trainerDni, // Pasar trainerDni
                                 navController = navController
                             )
                             isLoading.value = false
@@ -178,6 +178,7 @@ suspend fun saveOrUpdateTeam(
     name: String,
     category: String,
     league: String?,
+    trainerDni: String, // Añadido trainerDni como parámetro
     navController: NavHostController
 ) {
     try {
@@ -186,13 +187,12 @@ suspend fun saveOrUpdateTeam(
             name = name,
             category = category,
             league = league,
-            trainerDni = "12345678Z" // TODO: Obtener del usuario autenticado
+            trainerDni = trainerDni // Usar el trainerDni pasado
         )
         val response = if (isEditMode) {
             ApiClient.teamApi.updateTeam(teamId!!, team)
         } else {
-
-            ApiClient.teamApi.createTeam("trainerDni", team)
+            ApiClient.teamApi.createTeam(trainerDni, team) // Usar trainerDni
         }
         if (response.isSuccessful) {
             Toast.makeText(
@@ -219,6 +219,6 @@ suspend fun saveOrUpdateTeam(
 fun AddEditTeamScreenPreview() {
     val fakeNavController = rememberNavController()
     MyBasketTrainerTheme {
-        AddEditTeamScreen(teamId = null, navController = fakeNavController)
+        AddEditTeamScreen(teamId = null, trainerDni = "12345678Z", navController = fakeNavController)
     }
 }

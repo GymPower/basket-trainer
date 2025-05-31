@@ -1,6 +1,5 @@
 package com.example.mybaskettrainer.ui.screens
 
-
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -47,7 +46,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.rememberNavController
 import com.example.mybaskettrainer.R
 import com.example.mybaskettrainer.data.model.Team
@@ -57,7 +55,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TeamsScreen(navController: NavHostController) {
+fun TeamsScreen(navController: NavHostController, trainerDni: String) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val teamsState = remember { mutableStateOf<List<Team>>(emptyList()) }
@@ -65,9 +63,14 @@ fun TeamsScreen(navController: NavHostController) {
     var menuExpanded by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
+        if (trainerDni.isEmpty()) {
+            Toast.makeText(context, "Error: Trainer DNI not provided", Toast.LENGTH_LONG).show()
+            navController.popBackStack()
+            return@LaunchedEffect
+        }
         isLoading.value = true
         try {
-            val response = ApiClient.teamApi.getTeamsByTrainer("dni")//TODO, añadir el val del dni
+            val response = ApiClient.teamApi.getTeamsByTrainer(trainerDni)
             if (response.isSuccessful) {
                 teamsState.value = response.body()?.sortedByDescending { it.isFavorite } ?: emptyList()
             } else {
@@ -80,10 +83,9 @@ fun TeamsScreen(navController: NavHostController) {
     }
 
     Scaffold(
-
         topBar = {
             TopAppBar(
-                title = { Text("Pizarra Táctica") },
+                title = { Text(stringResource(R.string.my_teams)) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = "Volver")
@@ -100,10 +102,8 @@ fun TeamsScreen(navController: NavHostController) {
                         DropdownMenuItem(
                             text = { Text("Pantalla Principal") },
                             onClick = {
-                                navController.navigate("main_screen") {
-                                    popUpTo(navController.graph.startDestinationId) {
-                                        inclusive = false
-                                    }
+                                navController.navigate("mainScreen/$trainerDni") {
+                                    popUpTo(navController.graph.startDestinationId) { inclusive = false }
                                     launchSingleTop = true
                                 }
                                 menuExpanded = false
@@ -117,10 +117,8 @@ fun TeamsScreen(navController: NavHostController) {
                         DropdownMenuItem(
                             text = { Text("Jugadores") },
                             onClick = {
-                                navController.navigate("player_screen") {
-                                    popUpTo(navController.graph.startDestinationId) {
-                                        inclusive = false
-                                    }
+                                navController.navigate("playerScreen/$trainerDni") {
+                                    popUpTo(navController.graph.startDestinationId) { inclusive = false }
                                     launchSingleTop = true
                                 }
                                 menuExpanded = false
@@ -129,10 +127,8 @@ fun TeamsScreen(navController: NavHostController) {
                         DropdownMenuItem(
                             text = { Text("Agenda") },
                             onClick = {
-                                navController.navigate("agenda_screen") {
-                                    popUpTo(navController.graph.startDestinationId) {
-                                        inclusive = false
-                                    }
+                                navController.navigate("agendaScreen") {
+                                    popUpTo(navController.graph.startDestinationId) { inclusive = false }
                                     launchSingleTop = true
                                 }
                                 menuExpanded = false
@@ -141,10 +137,8 @@ fun TeamsScreen(navController: NavHostController) {
                         DropdownMenuItem(
                             text = { Text("Marcador") },
                             onClick = {
-                                navController.navigate("scoreboard_screen") {
-                                    popUpTo(navController.graph.startDestinationId) {
-                                        inclusive = false
-                                    }
+                                navController.navigate("scoreboardScreen") {
+                                    popUpTo(navController.graph.startDestinationId) { inclusive = false }
                                     launchSingleTop = true
                                 }
                                 menuExpanded = false
@@ -153,7 +147,7 @@ fun TeamsScreen(navController: NavHostController) {
                         DropdownMenuItem(
                             text = { Text("Pizarra Táctica") },
                             onClick = {
-                                navController.navigate("tactics_board") {
+                                navController.navigate("tacticsBoard") {
                                     popUpTo(navController.graph.startDestinationId) { inclusive = false }
                                     launchSingleTop = true
                                 }
@@ -161,7 +155,6 @@ fun TeamsScreen(navController: NavHostController) {
                             }
                         )
                     }
-
                 }
             )
         }
@@ -231,7 +224,7 @@ fun TeamCard(team: Team, onClick: () -> Unit, onFavoriteToggle: () -> Unit) {
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Imagen placeholder
+// Imagen placeholder
             Image(
                 painter = painterResource(R.drawable.icono_equipo),
                 contentDescription = "Team Image",
@@ -265,6 +258,6 @@ fun TeamCard(team: Team, onClick: () -> Unit, onFavoriteToggle: () -> Unit) {
 fun TeamsScreenPreview() {
     val fakeNavController = rememberNavController()
     MyBasketTrainerTheme {
-        TeamsScreen(navController = fakeNavController)
+        TeamsScreen(navController = fakeNavController, trainerDni = "12345678A")
     }
 }

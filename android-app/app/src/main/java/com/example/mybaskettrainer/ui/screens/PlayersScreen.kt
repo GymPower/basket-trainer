@@ -55,7 +55,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PlayersScreen(navController: NavHostController) {
+fun PlayersScreen(navController: NavHostController, trainerDni: String) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val playersState = remember { mutableStateOf<List<Player>>(emptyList()) }
@@ -66,9 +66,14 @@ fun PlayersScreen(navController: NavHostController) {
     var menuExpanded by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
+        if (trainerDni.isEmpty()) {
+            Toast.makeText(context, "Error: Trainer DNI not provided", Toast.LENGTH_LONG).show()
+            navController.popBackStack()
+            return@LaunchedEffect
+        }
         isLoading.value = true
         try {
-            val response = ApiClient.playerApi.getPlayersByTrainer("meter dni entrenador")
+            val response = ApiClient.playerApi.getPlayersByTrainer(trainerDni)
             if (response.isSuccessful) {
                 playersState.value = response.body()?.sortedBy { it.firstSurname } ?: emptyList()
             } else {
@@ -80,13 +85,12 @@ fun PlayersScreen(navController: NavHostController) {
         isLoading.value = false
     }
 
-    // Filtrar jugadores según los criterios de búsqueda
     val filteredPlayers = playersState.value.filter { player ->
         val matchesName = player.name.contains(searchQuery, ignoreCase = true) ||
                 player.firstSurname.contains(searchQuery, ignoreCase = true)
-        val matchesCategory = if (categoryFilter.isEmpty()) true else player.category?.contains(categoryFilter, ignoreCase = true)
+        val matchesCategory = if (categoryFilter.isEmpty()) true else player.category?.contains(categoryFilter, ignoreCase = true) == true
         val matchesTeam = if (teamFilter.isEmpty()) true else player.team?.name?.contains(teamFilter, ignoreCase = true) ?: false
-        matchesName && matchesCategory == true && matchesTeam
+        matchesName && matchesCategory && matchesTeam
     }.sortedBy { it.firstSurname }
 
     Scaffold(
@@ -102,7 +106,6 @@ fun PlayersScreen(navController: NavHostController) {
                     IconButton(onClick = { menuExpanded = true }) {
                         Icon(Icons.Filled.Menu, contentDescription = "Menú")
                     }
-// Menú desplegable
                     DropdownMenu(
                         expanded = menuExpanded,
                         onDismissRequest = { menuExpanded = false }
@@ -110,7 +113,7 @@ fun PlayersScreen(navController: NavHostController) {
                         DropdownMenuItem(
                             text = { Text("Pantalla Principal") },
                             onClick = {
-                                navController.navigate("main_screen") {
+                                navController.navigate("mainScreen/$trainerDni") {
                                     popUpTo(navController.graph.startDestinationId) { inclusive = false }
                                     launchSingleTop = true
                                 }
@@ -120,7 +123,7 @@ fun PlayersScreen(navController: NavHostController) {
                         DropdownMenuItem(
                             text = { Text("Equipos") },
                             onClick = {
-                                navController.navigate("team_screen") {
+                                navController.navigate("teamScreen/$trainerDni") {
                                     popUpTo(navController.graph.startDestinationId) { inclusive = false }
                                     launchSingleTop = true
                                 }
@@ -135,7 +138,7 @@ fun PlayersScreen(navController: NavHostController) {
                         DropdownMenuItem(
                             text = { Text("Agenda") },
                             onClick = {
-                                navController.navigate("agenda_screen") {
+                                navController.navigate("agendaScreen") {
                                     popUpTo(navController.graph.startDestinationId) { inclusive = false }
                                     launchSingleTop = true
                                 }
@@ -145,7 +148,7 @@ fun PlayersScreen(navController: NavHostController) {
                         DropdownMenuItem(
                             text = { Text("Marcador") },
                             onClick = {
-                                navController.navigate("scoreboard_screen") {
+                                navController.navigate("scoreboardScreen") {
                                     popUpTo(navController.graph.startDestinationId) { inclusive = false }
                                     launchSingleTop = true
                                 }
@@ -155,7 +158,7 @@ fun PlayersScreen(navController: NavHostController) {
                         DropdownMenuItem(
                             text = { Text("Pizarra Táctica") },
                             onClick = {
-                                navController.navigate("tactics_board") {
+                                navController.navigate("tacticsBoard") {
                                     popUpTo(navController.graph.startDestinationId) { inclusive = false }
                                     launchSingleTop = true
                                 }
@@ -183,7 +186,7 @@ fun PlayersScreen(navController: NavHostController) {
                 .padding(paddingValues)
                 .padding(horizontal = 16.dp)
         ) {
-            // Filtros de búsqueda
+// Filtros de búsqueda
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -221,7 +224,7 @@ fun PlayersScreen(navController: NavHostController) {
                 )
             }
 
-            // Lista de jugadores
+// Lista de jugadores
             if (isLoading.value) {
                 Column(
                     modifier = Modifier.fillMaxSize(),
@@ -294,11 +297,12 @@ fun PlayerCard(player: Player, onClick: () -> Unit) {
         }
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 fun PlayerScreenPreview() {
     val fakeNavController = rememberNavController()
     MyBasketTrainerTheme {
-        PlayersScreen(navController = fakeNavController)
+        PlayersScreen(navController = fakeNavController, trainerDni = "12345678A")
     }
 }

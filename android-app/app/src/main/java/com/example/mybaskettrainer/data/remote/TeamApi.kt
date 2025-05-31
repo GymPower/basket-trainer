@@ -22,5 +22,6 @@ interface TeamApi {
 
     @DELETE("api/teams/{id}")
     suspend fun deleteTeam(@Path("id") id: Long): Response<Unit>
-    abstract fun getTeams(): Any
+
 }
+

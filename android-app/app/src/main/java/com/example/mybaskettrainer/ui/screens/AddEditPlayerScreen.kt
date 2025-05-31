@@ -44,7 +44,7 @@ import java.time.LocalDate
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddEditPlayerScreen(playerId: String? = null, navController: NavHostController) {
+fun AddEditPlayerScreen(playerId: String? = null, trainerDni: String = "12345678Z", navController: NavHostController) { // Añadido trainerDni
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val name = remember { mutableStateOf("") }
@@ -83,7 +83,7 @@ fun AddEditPlayerScreen(playerId: String? = null, navController: NavHostControll
         if (isEditMode) {
             isLoading.value = true
             try {
-                val response = ApiClient.playerApi.getPlayersByTrainer("DNI de entrenador")//TODO meter el dni del trainer
+                val response = ApiClient.playerApi.getPlayersByTrainer(trainerDni) // Usar trainerDni pasado
                 val player = response.body()?.find { it.playerId == parsedPlayerId }
                 if (response.isSuccessful && player != null) {
                     name.value = player.name
@@ -211,6 +211,7 @@ fun AddEditPlayerScreen(playerId: String? = null, navController: NavHostControll
                                 telephone = telephone.value.ifEmpty { null },
                                 category = category.value.ifEmpty { null },
                                 teamId = teamId.value.toIntOrNull(),
+                                trainerDni = trainerDni, // Pasar trainerDni
                                 navController = navController
                             )
                             isLoading.value = false
@@ -238,6 +239,7 @@ suspend fun saveOrUpdatePlayer(
     telephone: String?,
     category: String?,
     teamId: Int?,
+    trainerDni: String, // Añadido trainerDni como parámetro
     navController: NavHostController
 ) {
     try {
@@ -261,13 +263,13 @@ suspend fun saveOrUpdatePlayer(
             email = email,
             telephone = telephone,
             category = category,
-            trainerDni = null,
+            trainerDni = trainerDni, // Asignar trainerDni al jugador
             team = team
         )
         val response = if (isEditMode) {
             ApiClient.playerApi.updatePlayer(playerId!!, player)
         } else {
-            ApiClient.playerApi.createPlayer("Dni trainer", player)
+            ApiClient.playerApi.createPlayer(trainerDni, player) // Usar trainerDni
         }
         if (response.isSuccessful) {
             Toast.makeText(
@@ -294,6 +296,6 @@ suspend fun saveOrUpdatePlayer(
 fun AddEditPlayerScreenPreview() {
     val fakeNavController = rememberNavController()
     MyBasketTrainerTheme {
-        AddEditPlayerScreen(navController = fakeNavController)
+        AddEditPlayerScreen(navController = fakeNavController, trainerDni = "12345678Z")
     }
 }

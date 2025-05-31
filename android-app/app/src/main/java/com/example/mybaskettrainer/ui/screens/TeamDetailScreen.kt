@@ -1,6 +1,5 @@
 package com.example.mybaskettrainer.ui.screens
 
-
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -34,7 +33,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.rememberNavController
 import com.example.mybaskettrainer.R
 import com.example.mybaskettrainer.data.model.Team
@@ -44,17 +42,17 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TeamDetailScreen(teamId: Int, navController: NavHostController) {
+fun TeamDetailScreen(teamId: Int, trainerDni: String = "12345678Z", navController: NavHostController) { // Añadido trainerDni
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val teamState = remember { mutableStateOf<Team?>(null) }
     val isLoading = remember { mutableStateOf(true) }
 
-    // Cargar detalles del equipo
+// Cargar detalles del equipo
     LaunchedEffect(teamId) {
         isLoading.value = true
         try {
-            val response = ApiClient.teamApi.getTeams()
+            val response = ApiClient.teamApi.getTeamsByTrainer(trainerDni) // Usar getTeamsByTrainer
             if (response.isSuccessful) {
                 teamState.value = response.body()?.find { it.teamId == teamId }
             } else {
@@ -132,7 +130,7 @@ fun TeamDetailScreen(teamId: Int, navController: NavHostController) {
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Button(
-                        onClick = { navController.navigate("addEditTeamScreen/${team.teamId}") },
+                        onClick = { navController.navigate("addEditTeamScreen/${team.teamId}/$trainerDni") }, // Pasar trainerDni
                         modifier = Modifier.weight(1f)
                     ) {
                         Text(stringResource(R.string.edit))
@@ -142,7 +140,7 @@ fun TeamDetailScreen(teamId: Int, navController: NavHostController) {
                         onClick = {
                             scope.launch {
                                 try {
-                                    val response = ApiClient.teamApi.deleteTeam(team.teamId)
+                                    val response = ApiClient.teamApi.deleteTeam(team.teamId.toLong())
                                     if (response.isSuccessful) {
                                         Toast.makeText(context, R.string.team_deleted, Toast.LENGTH_SHORT).show()
                                         navController.popBackStack()
@@ -169,6 +167,6 @@ fun TeamDetailScreen(teamId: Int, navController: NavHostController) {
 fun TeamDetailScreenPreview() {
     val fakeNavController = rememberNavController()
     MyBasketTrainerTheme {
-        TeamDetailScreen(teamId = 1, navController = fakeNavController)
+        TeamDetailScreen(teamId = 1, trainerDni = "12345678Z", navController = fakeNavController)
     }
 }
