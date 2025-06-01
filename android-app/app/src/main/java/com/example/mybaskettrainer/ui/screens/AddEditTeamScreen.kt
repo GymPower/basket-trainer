@@ -155,7 +155,7 @@ fun AddEditTeamScreen(teamId: String? = null, trainerDni: String = "12345678Z", 
                                 name = name.value,
                                 category = category.value,
                                 league = league.value,
-                                trainerDni = trainerDni, // Pasar trainerDni
+                                trainerDni = trainerDni,
                                 navController = navController
                             )
                             isLoading.value = false
@@ -178,7 +178,7 @@ suspend fun saveOrUpdateTeam(
     name: String,
     category: String,
     league: String?,
-    trainerDni: String, // Añadido trainerDni como parámetro
+    trainerDni: String,
     navController: NavHostController
 ) {
     try {
@@ -187,12 +187,12 @@ suspend fun saveOrUpdateTeam(
             name = name,
             category = category,
             league = league,
-            trainerDni = trainerDni // Usar el trainerDni pasado
+            trainerDni = trainerDni
         )
         val response = if (isEditMode) {
             ApiClient.teamApi.updateTeam(teamId!!, team)
         } else {
-            ApiClient.teamApi.createTeam(trainerDni, team) // Usar trainerDni
+            ApiClient.teamApi.createTeam(trainerDni, team)
         }
         if (response.isSuccessful) {
             Toast.makeText(

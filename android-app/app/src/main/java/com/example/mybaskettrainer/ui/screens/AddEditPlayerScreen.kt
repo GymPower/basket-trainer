@@ -211,7 +211,7 @@ fun AddEditPlayerScreen(playerId: String? = null, trainerDni: String = "12345678
                                 telephone = telephone.value.ifEmpty { null },
                                 category = category.value.ifEmpty { null },
                                 teamId = teamId.value.toIntOrNull(),
-                                trainerDni = trainerDni, // Pasar trainerDni
+                                trainerDni = trainerDni,
                                 navController = navController
                             )
                             isLoading.value = false
@@ -239,7 +239,7 @@ suspend fun saveOrUpdatePlayer(
     telephone: String?,
     category: String?,
     teamId: Int?,
-    trainerDni: String, // Añadido trainerDni como parámetro
+    trainerDni: String,
     navController: NavHostController
 ) {
     try {
@@ -263,13 +263,13 @@ suspend fun saveOrUpdatePlayer(
             email = email,
             telephone = telephone,
             category = category,
-            trainerDni = trainerDni, // Asignar trainerDni al jugador
+            trainerDni = trainerDni,
             team = team
         )
         val response = if (isEditMode) {
             ApiClient.playerApi.updatePlayer(playerId!!, player)
         } else {
-            ApiClient.playerApi.createPlayer(trainerDni, player) // Usar trainerDni
+            ApiClient.playerApi.createPlayer(trainerDni, player)
         }
         if (response.isSuccessful) {
             Toast.makeText(

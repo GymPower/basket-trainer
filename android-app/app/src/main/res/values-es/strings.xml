@@ -16,7 +16,6 @@
     <string name="user_wrong">Usuario o contraseña incorrectos</string>
     <string name="connection_error">Error de conexión:</string>
     <string name="back">Atrás</string>
-    <string name="loading">Cargando</string>
 
 
     //RegisterScreen

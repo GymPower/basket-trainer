@@ -181,13 +181,23 @@ fun TacticsBoardScreen(navController: NavHostController) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Button(onClick = { currentColor = Color.Red }, modifier = Modifier.weight(1f)) {
+                Button(
+                    onClick = { currentColor = Color.Red },
+                    modifier = Modifier.weight(1f),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
+                ) {
                     Text("Rojo")
                 }
-                Button(onClick = { currentColor = Color.Blue }, modifier = Modifier.weight(1f)) {
+                Button(onClick = { currentColor = Color.Blue },
+                    modifier = Modifier.weight(1f),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Blue)
+                ) {
                     Text("Azul")
                 }
-                Button(onClick = { currentColor = Color.Green }, modifier = Modifier.weight(1f)) {
+                Button(onClick = { currentColor = Color.Green },
+                    modifier = Modifier.weight(1f),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Green)
+                ) {
                     Text("Verde")
                 }
             }

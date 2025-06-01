@@ -65,7 +65,6 @@ fun ScoreboardScreen(navController: NavHostController) {
                     IconButton(onClick = { menuExpanded = true }) {
                         Icon(Icons.Filled.Menu, contentDescription = "Menú")
                     }
-// Menú desplegable
                     DropdownMenu(
                         expanded = menuExpanded,
                         onDismissRequest = { menuExpanded = false }
@@ -171,20 +170,26 @@ fun ScoreboardScreen(navController: NavHostController) {
                         }) {
                             Text("+2")
                         }
+
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
                         Button(onClick = {
                             ScoreboardStorage.updateHomeScore(scoreboard.homeScore + 3)
                             updateScoreboard()
                         }) {
                             Text("+3")
                         }
+                        Button(onClick = {
+                            ScoreboardStorage.updateHomeScore(scoreboard.homeScore - 1)
+                            updateScoreboard()
+                        }) {
+                            Text("-1")
+                        }
                     }
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Button(onClick = {
-                        ScoreboardStorage.updateHomeScore(scoreboard.homeScore - 1)
-                        updateScoreboard()
-                    }) {
-                        Text("-1")
-                    }
+
                 }
 
                 Text(
@@ -219,20 +224,26 @@ fun ScoreboardScreen(navController: NavHostController) {
                         }) {
                             Text("+2")
                         }
+
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
                         Button(onClick = {
                             ScoreboardStorage.updateAwayScore(scoreboard.awayScore + 3)
                             updateScoreboard()
                         }) {
                             Text("+3")
                         }
+                        Button(onClick = {
+                            ScoreboardStorage.updateAwayScore(scoreboard.awayScore - 1)
+                            updateScoreboard()
+                        }) {
+                            Text("-1")
+                        }
                     }
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Button(onClick = {
-                        ScoreboardStorage.updateAwayScore(scoreboard.awayScore - 1)
-                        updateScoreboard()
-                    }) {
-                        Text("-1")
-                    }
+
                 }
             }
 

@@ -15,8 +15,6 @@
     <string name="user_wrong">Incorrect username or password</string>
     <string name="connection_error">Connection error:</string>
     <string name="back">Back</string>
-    <string name="loading">Loading</string>
-
 
     //RegisterScreen
     <string name="trainer_register">Coach Registration</string>
@@ -87,8 +85,6 @@
     <string name="event_error">Name, Date, and Time are required</string>
     <string name="event_created">Event created</string>
     <string name="event_updated">Event updated</string>
-    <string name="adress">Adress</string>
-    <string name="adress">Adress</string>
 
 
 
@@ -97,11 +93,6 @@
     <string name="error_event_id">Invalid Event ID</string>
     <string name="go_back">Go back</string>
     <string name="event_not_found">Event not found</string>
-    <string name="adress">Adress</string>
-    <string name="adress">Adress</string>
-    <string name="adress">Adress</string>
-    <string name="adress">Adress</string>
-    <string name="adress">Adress</string>
 
 
 </resources>

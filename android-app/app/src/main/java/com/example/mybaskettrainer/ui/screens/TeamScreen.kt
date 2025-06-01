@@ -224,7 +224,6 @@ fun TeamCard(team: Team, onClick: () -> Unit, onFavoriteToggle: () -> Unit) {
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-// Imagen placeholder
             Image(
                 painter = painterResource(R.drawable.icono_equipo),
                 contentDescription = "Team Image",
