@@ -10,6 +10,7 @@ spring:
     show-sql: ${SPRING_JPA_SHOW_SQL:true}
     properties:
       hibernate:
+        ddl-auto: create-drop
         dialect: ${SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT:org.hibernate.dialect.MySQLDialect}
 
 javax:

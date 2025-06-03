@@ -17,7 +17,7 @@ CREATE TABLE trainer (
 
 -- Tabla TEAM
 CREATE TABLE team (
-    team_id INT AUTO_INCREMENT PRIMARY KEY,
+    team_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     category VARCHAR(50) NOT NULL,
     league VARCHAR(100),
@@ -27,7 +27,7 @@ CREATE TABLE team (
 
 -- Tabla PLAYER
 CREATE TABLE player (
-    player_id INT AUTO_INCREMENT PRIMARY KEY,
+    player_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
     first_surname VARCHAR(50) NOT NULL,
     second_surname VARCHAR(50),
@@ -36,7 +36,7 @@ CREATE TABLE player (
     telephone VARCHAR(15),
     category VARCHAR(50),
     trainer_dni VARCHAR(9),
-    team_dni INT,
+    team_id BIGINT,
     FOREIGN KEY (trainer_dni) REFERENCES trainer(trainer_dni) ON DELETE SET NULL,
     FOREIGN KEY (team_dni) REFERENCES team(team_id) ON DELETE SET NULL
 );
