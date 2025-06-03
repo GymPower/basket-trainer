@@ -222,7 +222,10 @@ fun MenuIcon(
             .padding(8.dp)
             .height(120.dp)
             .width(120.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.secondary
+        )
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
