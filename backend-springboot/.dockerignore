@@ -2,3 +2,6 @@
 target/
 *.md
 Dockerfile
+.dockerignore
+*.sql
+env_vars.sh
