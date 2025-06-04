@@ -22,7 +22,7 @@ public class PlayerService {
     private ITrainerRepository trainerRepository;
 
     public List<Player> getPlayersByTeam(Long teamId) {
-        return this.playerRepository.findByTeamId(teamId);
+        return this.playerRepository.findByTeamTeamId(teamId);
     }
 
     public List<Player> getPlayersByTrainer(String trainerDni) {
