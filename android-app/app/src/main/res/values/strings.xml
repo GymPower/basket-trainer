@@ -33,6 +33,8 @@
     <string name="playbook">Playbook</string>
     <string name="scoreboard">Scoreboard</string>
     <string name="logout">Log out</string>
+    <string name="menu">Menut</string>
+
 
     //TeamScreen
     <string name="add_team">Add Team</string>
@@ -71,6 +73,14 @@
     <string name="player_not_found">Player not found</string>
     <string name="player_deleted">Player deleted</string>
     <string name="error_deleting_player">Error deleting player</string>
+    <string name="invalid_player_id">Invalid Player ID</string>
+    <string name="edit_player">Edit Player</string>
+    <string name="team_optional">Team ID (optional)</string>
+    <string name="player_updated">Player updated</string>
+
+
+
+
 
 
     //AgendaScreen
@@ -85,6 +95,9 @@
     <string name="event_error">Name, Date, and Time are required</string>
     <string name="event_created">Event created</string>
     <string name="event_updated">Event updated</string>
+    <string name="no_events_found">No events found</string>
+    <string name="delete_event">Delete Event</string>
+
 
 
 
@@ -93,6 +106,7 @@
     <string name="error_event_id">Invalid Event ID</string>
     <string name="go_back">Go back</string>
     <string name="event_not_found">Event not found</string>
+    <string name="invalid_team_id">Invalid Team ID</string>
 
 
 </resources>

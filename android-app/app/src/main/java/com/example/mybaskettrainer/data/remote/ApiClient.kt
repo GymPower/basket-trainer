@@ -1,5 +1,6 @@
 package com.example.mybaskettrainer.data.remote
 
+import com.example.mybaskettrainer.api.AuthApi
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

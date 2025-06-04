@@ -35,6 +35,8 @@
     <string name="playbook">Pizarra</string>
     <string name="scoreboard">Marcador</string>
     <string name="logout">Cerrar sesión</string>
+    <string name="menu">Menut</string>
+
 
 
     //TeamScreen
@@ -74,6 +76,11 @@
     <string name="player_not_found">Jugador no encontrado</string>
     <string name="player_deleted">Jugador borrado</string>
     <string name="error_deleting_player">Error borrando jugador</string>
+    <string name="invalid_player_id">Invalido ID del Jugador</string>
+    <string name="team_optional">ID del equipo (opcional)</string>
+    <string name="player_updated">Jugador actualizado</string>
+
+
 
 
     //AgendaScreen
@@ -88,6 +95,10 @@
     <string name="event_error">Nombre, Fecha y Hora necesarios</string>
     <string name="event_created">Evento creado</string>
     <string name="event_updated">Event actualizado</string>
+    <string name="edit_player">Editar Jugador</string>
+    <string name="no_events_found">No hay eventos</string>
+    <string name="delete_event">Evento eliminado</string>
+
 
 
 
@@ -95,6 +106,8 @@
     <string name="error_event_id">Id inválido del evento</string>
     <string name="go_back">Ir atrás</string>
     <string name="event_not_found">Evento no encontrado</string>
+    <string name="invalid_team_id">ID Equipo inválid</string>
+
 
 
 

@@ -16,7 +16,7 @@ import java.util.List;
 public class Trainer {
 
     @Id
-    @Column(name = "trainer_dni")
+    @Column(nullable = false, name = "trainer_dni")
     private String dni;
 
     @Column(nullable = false, name = "username", unique = true)

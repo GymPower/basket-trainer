@@ -39,10 +39,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.mybaskettrainer.R
 import com.example.mybaskettrainer.data.local.EventStorage
 import com.example.mybaskettrainer.data.model.Event
 import com.example.mybaskettrainer.ui.theme.MyBasketTrainerTheme
@@ -59,22 +61,22 @@ fun AgendaScreen(navController: NavHostController) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Agenda") },
+                title = { Text(stringResource(R.string.agenda)) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = "Volver")
+                        Icon(Icons.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
                     }
                 },
                 actions = {
                     IconButton(onClick = { menuExpanded = true }) {
-                        Icon(Icons.Filled.Menu, contentDescription = "Menú")
+                        Icon(Icons.Filled.Menu, contentDescription = stringResource(R.string.menu))
                     }
                     DropdownMenu(
                         expanded = menuExpanded,
                         onDismissRequest = { menuExpanded = false }
                     ) {
                         DropdownMenuItem(
-                            text = { Text("Pantalla Principal") },
+                            text = { stringResource(R.string.main_screen) },
                             onClick = {
                                 navController.navigate("main_screen") {
                                     popUpTo(navController.graph.startDestinationId) { inclusive = false }
@@ -84,7 +86,7 @@ fun AgendaScreen(navController: NavHostController) {
                             }
                         )
                         DropdownMenuItem(
-                            text = { Text("Equipos") },
+                            text = { Text(stringResource(R.string.teams) ) },
                             onClick = {
                                 navController.navigate("team_screen") {
                                     popUpTo(navController.graph.startDestinationId) { inclusive = false }
@@ -94,7 +96,7 @@ fun AgendaScreen(navController: NavHostController) {
                             }
                         )
                         DropdownMenuItem(
-                            text = { Text("Jugadores") },
+                            text = { Text(stringResource(R.string.players) ) },
                             onClick = {
                                 navController.navigate("player_screen") {
                                     popUpTo(navController.graph.startDestinationId) { inclusive = false }
@@ -104,12 +106,12 @@ fun AgendaScreen(navController: NavHostController) {
                             }
                         )
                         DropdownMenuItem(
-                            text = { Text("Agenda") },
+                            text = { Text(stringResource(R.string.agenda) ) },
                             enabled = false,
                             onClick = {}
                         )
                         DropdownMenuItem(
-                            text = { Text("Marcador") },
+                            text = { Text(stringResource(R.string.scoreboard) ) },
                             onClick = {
                                 navController.navigate("scoreboard_screen") {
                                     popUpTo(navController.graph.startDestinationId) { inclusive = false }
@@ -119,7 +121,7 @@ fun AgendaScreen(navController: NavHostController) {
                             }
                         )
                         DropdownMenuItem(
-                            text = { Text("Pizarra Táctica") },
+                            text = { Text(stringResource(R.string.tactics_board) ) },
                             onClick = {
                                 navController.navigate("tactics_board") {
                                     popUpTo(navController.graph.startDestinationId) { inclusive = false }
@@ -137,9 +139,9 @@ fun AgendaScreen(navController: NavHostController) {
                 onClick = { navController.navigate("addEditEventScreen") },
                 modifier = Modifier.padding(16.dp)
             ) {
-                Icon(Icons.Filled.Add, contentDescription = "Add Event")
+                Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.add_event) )
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("Add Event")
+                Text(stringResource(R.string.add_event))
             }
         }
     ) { paddingValues ->
@@ -156,12 +158,12 @@ fun AgendaScreen(navController: NavHostController) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "No events found",
+                        text = stringResource(R.string.no_events_found),
                         style = MaterialTheme.typography.bodyLarge
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Button(onClick = { navController.navigate("addEditEventScreen") }) {
-                        Text("Add Event")
+                        Text(stringResource(R.string.add_event))
                     }
                 }
             } else {
@@ -223,10 +225,10 @@ fun EventCard(
             }
             Row {
                 IconButton(onClick = onEdit) {
-                    Icon(Icons.Filled.Edit, contentDescription = "Edit Event")
+                    Icon(Icons.Filled.Edit, contentDescription = stringResource(R.string.edit_event))
                 }
                 IconButton(onClick = onDelete) {
-                    Icon(Icons.Filled.Delete, contentDescription = "Delete Event")
+                    Icon(Icons.Filled.Delete, contentDescription = stringResource(R.string.delete_event))
                 }
             }
         }

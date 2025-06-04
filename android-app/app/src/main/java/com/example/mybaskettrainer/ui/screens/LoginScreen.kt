@@ -16,6 +16,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.mybaskettrainer.R
+import com.example.mybaskettrainer.navigation.Routes
 import com.example.mybaskettrainer.ui.theme.MyBasketTrainerTheme
 import com.example.mybaskettrainer.ui.viewmodel.LoginViewModel
 
@@ -101,7 +102,7 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = vi
         Spacer(modifier = Modifier.height(16.dp))
 
         TextButton(
-            onClick = { navController.navigate("registerScreen") },
+            onClick = { navController.navigate(Routes.RegisterScreen.route) },
             enabled = !isLoading
         ) {
             Text(text = stringResource(R.string.text_to_register))

@@ -28,10 +28,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.mybaskettrainer.R
 import com.example.mybaskettrainer.data.model.Team
 import com.example.mybaskettrainer.data.remote.ApiClient
 import com.example.mybaskettrainer.ui.theme.MyBasketTrainerTheme
@@ -56,13 +58,13 @@ fun AddEditTeamScreen(teamId: String? = null, trainerDni: String = "12345678Z", 
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Invalid Team ID",
+                text = stringResource(R.string.invalid_team_id),
                 style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.error
             )
             Spacer(modifier = Modifier.height(16.dp))
             Button(onClick = { navController.popBackStack() }) {
-                Text("Go Back")
+                Text(stringResource(R.string.go_back))
             }
         }
         return
@@ -72,7 +74,7 @@ fun AddEditTeamScreen(teamId: String? = null, trainerDni: String = "12345678Z", 
         if (isEditMode) {
             isLoading.value = true
             try {
-                val response = ApiClient.teamApi.getTeamsByTrainer(trainerDni) // Usar getTeamsByTrainer
+                val response = ApiClient.teamApi.getTeamsByTrainer(trainerDni)
                 val team = response.body()?.find { it.teamId == parsedTeamId }
                 if (response.isSuccessful && team != null) {
                     name.value = team.name
@@ -91,10 +93,10 @@ fun AddEditTeamScreen(teamId: String? = null, trainerDni: String = "12345678Z", 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(if (isEditMode) "Edit Team" else "Add Team") },
+                title = { Text(if (isEditMode) stringResource(R.string.edit_team) else stringResource(R.string.add_team)) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
                     }
                 }
             )
@@ -108,7 +110,7 @@ fun AddEditTeamScreen(teamId: String? = null, trainerDni: String = "12345678Z", 
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = "Loading")
+                Text(text = stringResource(R.string.loading))
             }
         } else {
             Column(
@@ -121,21 +123,21 @@ fun AddEditTeamScreen(teamId: String? = null, trainerDni: String = "12345678Z", 
                 OutlinedTextField(
                     value = name.value,
                     onValueChange = { name.value = it },
-                    label = { Text("Team Name") },
+                    label = { Text(stringResource(R.string.team_name)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )
                 OutlinedTextField(
                     value = category.value,
                     onValueChange = { category.value = it },
-                    label = { Text("Category") },
+                    label = { Text(stringResource(R.string.category)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )
                 OutlinedTextField(
                     value = league.value,
                     onValueChange = { league.value = it },
-                    label = { Text("League") },
+                    label = { Text(stringResource(R.string.league)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )
@@ -164,7 +166,7 @@ fun AddEditTeamScreen(teamId: String? = null, trainerDni: String = "12345678Z", 
                     modifier = Modifier.fillMaxWidth(),
                     enabled = !isLoading.value
                 ) {
-                    Text(if (isEditMode) "Save" else "Create")
+                    Text(if (isEditMode) stringResource(R.string.save) else stringResource(R.string.create))
                 }
             }
         }

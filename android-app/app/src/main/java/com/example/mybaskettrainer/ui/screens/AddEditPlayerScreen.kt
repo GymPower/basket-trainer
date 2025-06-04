@@ -30,10 +30,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.mybaskettrainer.R
 import com.example.mybaskettrainer.data.model.Player
 import com.example.mybaskettrainer.data.model.Team
 import com.example.mybaskettrainer.data.remote.ApiClient
@@ -44,7 +46,7 @@ import java.time.LocalDate
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddEditPlayerScreen(playerId: String? = null, trainerDni: String = "12345678Z", navController: NavHostController) { // Añadido trainerDni
+fun AddEditPlayerScreen(playerId: String? = null, trainerDni: String = "12345678Z", navController: NavHostController) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val name = remember { mutableStateOf("") }
@@ -66,14 +68,15 @@ fun AddEditPlayerScreen(playerId: String? = null, trainerDni: String = "12345678
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            //
             Text(
-                text = "Invalid Player ID",
+                text = stringResource(R.string.invalid_player_id),
                 style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.error
             )
             Spacer(modifier = Modifier.height(16.dp))
             Button(onClick = { navController.popBackStack() }) {
-                Text("Go Back")
+                Text(stringResource(R.string.go_back))
             }
         }
         return
@@ -107,10 +110,10 @@ fun AddEditPlayerScreen(playerId: String? = null, trainerDni: String = "12345678
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(if (isEditMode) "Edit Player" else "Add Player") },
+                title = { Text(if (isEditMode) stringResource(R.string.edit_player) else stringResource(R.string.add_player)) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.Filled.ArrowBack, contentDescription = stringResource(R.string.go_back))
                     }
                 }
             )
@@ -124,7 +127,7 @@ fun AddEditPlayerScreen(playerId: String? = null, trainerDni: String = "12345678
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = "Loading")
+                Text(stringResource(R.string.loading))
             }
         } else {
             Column(
@@ -137,56 +140,56 @@ fun AddEditPlayerScreen(playerId: String? = null, trainerDni: String = "12345678
                 OutlinedTextField(
                     value = name.value,
                     onValueChange = { name.value = it },
-                    label = { Text("Name") },
+                    label = { Text(stringResource(R.string.name)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )
                 OutlinedTextField(
                     value = firstSurname.value,
                     onValueChange = { firstSurname.value = it },
-                    label = { Text("First Surname") },
+                    label = { Text(stringResource(R.string.first_surname)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )
                 OutlinedTextField(
                     value = secondSurname.value,
                     onValueChange = { secondSurname.value = it },
-                    label = { Text("Second Surname") },
+                    label = { Text(stringResource(R.string.second_surname)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )
                 OutlinedTextField(
                     value = birthdate.value,
                     onValueChange = { birthdate.value = it },
-                    label = { Text("Birthdate (YYYY-MM-DD)") },
+                    label = { Text(stringResource(R.string.birthdate)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )
                 OutlinedTextField(
                     value = email.value,
                     onValueChange = { email.value = it },
-                    label = { Text("Email") },
+                    label = { Text(stringResource(R.string.email)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )
                 OutlinedTextField(
                     value = telephone.value,
                     onValueChange = { telephone.value = it },
-                    label = { Text("Telephone") },
+                    label = { Text(stringResource(R.string.phone)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )
                 OutlinedTextField(
                     value = category.value,
                     onValueChange = { category.value = it },
-                    label = { Text("Category") },
+                    label = { Text(stringResource(R.string.category)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )
                 OutlinedTextField(
                     value = teamId.value,
                     onValueChange = { teamId.value = it },
-                    label = { Text("Team ID (optional)") },
+                    label = { Text(stringResource(R.string.team_optional)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )
@@ -220,7 +223,7 @@ fun AddEditPlayerScreen(playerId: String? = null, trainerDni: String = "12345678
                     modifier = Modifier.fillMaxWidth(),
                     enabled = !isLoading.value
                 ) {
-                    Text(if (isEditMode) "Save" else "Create")
+                    Text(if (isEditMode) stringResource(R.string.save) else stringResource(R.string.create))
                 }
             }
         }
