@@ -38,5 +38,5 @@ CREATE TABLE player (
     trainer_dni VARCHAR(9),
     team_id BIGINT,
     FOREIGN KEY (trainer_dni) REFERENCES trainer(trainer_dni) ON DELETE SET NULL,
-    FOREIGN KEY (team_dni) REFERENCES team(team_id) ON DELETE SET NULL
+    FOREIGN KEY (team_id) REFERENCES team(team_id) ON DELETE SET NULL
 );

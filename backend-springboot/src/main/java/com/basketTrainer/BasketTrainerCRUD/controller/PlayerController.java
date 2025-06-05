@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,9 +18,12 @@ public class PlayerController {
     @Autowired
     private PlayerService playerService;
 
+    // Obtener todos los jugadores de un equipo por su ID de equipo
     @GetMapping("/team/{teamId}")
     public ResponseEntity<List<PlayerDTO>> getPlayersByTeam(@PathVariable Long teamId) {
+        // Obtener la lista de jugadores del equipo usando el servicio
         List<Player> players = playerService.getPlayersByTeam(teamId);
+        // Mapear los jugadores a DTOs para la respuesta
         List<PlayerDTO> playerDTOs = players.stream().map(player -> {
             PlayerDTO dto = new PlayerDTO();
             dto.setPlayerId(player.getPlayerId());
@@ -30,13 +34,16 @@ public class PlayerController {
             dto.setEmail(player.getEmail());
             dto.setTelephone(player.getTelephone());
             dto.setCategory(player.getCategory());
-            dto.setTeamId(player.getTeam().getTeamId());
-            dto.setTrainerDni(player.getTrainer().getDni());
+            // Verificar que el equipo no sea nulo antes de obtener su ID
+            dto.setTeamId(player.getTeam() != null ? player.getTeam().getTeamId() : null);
+            // Verificar que el entrenador no sea nulo antes de obtener su DNI
+            dto.setTrainerDni(player.getTrainer() != null ? player.getTrainer().getDni() : null);
             return dto;
         }).collect(Collectors.toList());
         return ResponseEntity.ok(playerDTOs);
     }
 
+    // Obtener todos los jugadores asociados a un entrenador por su DNI
     @GetMapping("/trainer/{trainerDni}")
     public ResponseEntity<List<PlayerDTO>> getPlayersByTrainer(@PathVariable String trainerDni) {
         List<Player> players = playerService.getPlayersByTrainer(trainerDni);
@@ -50,13 +57,16 @@ public class PlayerController {
             dto.setEmail(player.getEmail());
             dto.setTelephone(player.getTelephone());
             dto.setCategory(player.getCategory());
-            dto.setTeamId(player.getTeam().getTeamId());
-            dto.setTrainerDni(player.getTrainer().getDni());
+            // Verificar que el equipo no sea nulo antes de obtener su ID
+            dto.setTeamId(player.getTeam() != null ? player.getTeam().getTeamId() : null);
+            // Verificar que el entrenador no sea nulo antes de obtener su DNI
+            dto.setTrainerDni(player.getTrainer() != null ? player.getTrainer().getDni() : null);
             return dto;
         }).collect(Collectors.toList());
         return ResponseEntity.ok(playerDTOs);
     }
 
+    // Crear un nuevo jugador asignándolo a un equipo y un entrenador
     @PostMapping("/{teamId}/{trainerDni}")
     public ResponseEntity<PlayerDTO> createPlayer(@PathVariable Long teamId, @PathVariable String trainerDni, @RequestBody PlayerDTO playerDTO) {
         Player player = new Player();
@@ -67,6 +77,7 @@ public class PlayerController {
         player.setEmail(playerDTO.getEmail());
         player.setTelephone(playerDTO.getTelephone());
         player.setCategory(playerDTO.getCategory());
+        // Crear el jugador usando el servicio, asignando equipo y entrenador
         Player createdPlayer = playerService.createPlayer(player, teamId, trainerDni);
 
         PlayerDTO createdDTO = new PlayerDTO();
@@ -78,11 +89,14 @@ public class PlayerController {
         createdDTO.setEmail(createdPlayer.getEmail());
         createdDTO.setTelephone(createdPlayer.getTelephone());
         createdDTO.setCategory(createdPlayer.getCategory());
-        createdDTO.setTeamId(createdPlayer.getTeam().getTeamId());
-        createdDTO.setTrainerDni(createdPlayer.getTrainer().getDni());
+        // Verificar que el equipo no sea nulo antes de obtener su ID
+        createdDTO.setTeamId(createdPlayer.getTeam() != null ? createdPlayer.getTeam().getTeamId() : null);
+        // Verificar que el entrenador no sea nulo antes de obtener su DNI
+        createdDTO.setTrainerDni(createdPlayer.getTrainer() != null ? createdPlayer.getTrainer().getDni() : null);
         return ResponseEntity.ok(createdDTO);
     }
 
+    // Actualizar un jugador existente por su ID
     @PutMapping("/{playerId}")
     public ResponseEntity<PlayerDTO> updatePlayer(@PathVariable Long playerId, @RequestBody PlayerDTO playerDTO) {
         Player player = new Player();
@@ -93,8 +107,10 @@ public class PlayerController {
         player.setEmail(playerDTO.getEmail());
         player.setTelephone(playerDTO.getTelephone());
         player.setCategory(playerDTO.getCategory());
+        // Actualizar el jugador usando el servicio
         Player updatedPlayer = playerService.updatePlayer(playerId, player);
 
+        // Mapear el jugador actualizado a un DTO para la respuesta
         PlayerDTO updatedDTO = new PlayerDTO();
         updatedDTO.setPlayerId(updatedPlayer.getPlayerId());
         updatedDTO.setName(updatedPlayer.getName());
@@ -104,14 +120,18 @@ public class PlayerController {
         updatedDTO.setEmail(updatedPlayer.getEmail());
         updatedDTO.setTelephone(updatedPlayer.getTelephone());
         updatedDTO.setCategory(updatedPlayer.getCategory());
-        updatedDTO.setTeamId(updatedPlayer.getTeam().getTeamId());
-        updatedDTO.setTrainerDni(updatedPlayer.getTrainer().getDni());
+        // Verificar que el equipo no sea nulo antes de obtener su ID
+        updatedDTO.setTeamId(updatedPlayer.getTeam() != null ? updatedPlayer.getTeam().getTeamId() : null);
+        // Verificar que el entrenador no sea nulo antes de obtener su DNI
+        updatedDTO.setTrainerDni(updatedPlayer.getTrainer() != null ? updatedPlayer.getTrainer().getDni() : null);
         return ResponseEntity.ok(updatedDTO);
     }
 
+    // Eliminar un jugador por su ID
     @DeleteMapping("/{playerId}")
     public ResponseEntity<Void> deletePlayer(@PathVariable Long playerId) {
         playerService.deletePlayer(playerId);
+        // Devolver una respuesta 204 No Content
         return ResponseEntity.noContent().build();
     }
 }

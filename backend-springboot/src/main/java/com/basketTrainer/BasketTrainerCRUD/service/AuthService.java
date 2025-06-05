@@ -13,8 +13,8 @@ public class AuthService {
     @Autowired
     private ITrainerRepository iTrainerRepository;
 
+    // Método para autenticar a un entrenador con sus credenciales
     public LoginResponse login(LoginRequest request) {
-
         Trainer trainer = this.iTrainerRepository.findByUsername(request.getUsername());
         if (trainer == null || !trainer.getPassword().equals(request.getPassword())) {
             throw new RuntimeException("Credenciales inválidas");

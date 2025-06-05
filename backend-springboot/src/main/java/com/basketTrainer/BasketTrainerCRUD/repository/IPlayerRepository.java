@@ -11,5 +11,6 @@ public interface IPlayerRepository extends JpaRepository<Player, Long> {
 
     @Query("SELECT p FROM Player p WHERE p.team.teamId = :teamId")
     List<Player> findByTeamTeamId(@Param("teamId") Long teamId);
+
     List<Player> findByTrainerDni(String trainerDni);
 }
