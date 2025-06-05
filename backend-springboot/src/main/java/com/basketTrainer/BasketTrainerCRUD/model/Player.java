@@ -41,7 +41,7 @@ public class Player {
     private String category;  // Categoría del jugador
 
     @ManyToOne
-    @JoinColumn(name = "trainer_dni")
+    @JoinColumn(name = "trainer_dni", columnDefinition = "VARCHAR(9)")
     private Trainer trainer;  // Relación muchos-a-uno con el entrenador
 
     @ManyToOne
