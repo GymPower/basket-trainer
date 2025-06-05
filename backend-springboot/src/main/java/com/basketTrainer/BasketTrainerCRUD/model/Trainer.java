@@ -16,7 +16,7 @@ import java.util.List;
 public class Trainer {
 
     @Id
-    @Column(nullable = false, name = "trainer_dni")
+    @Column(nullable = false, name = "trainer_dni", length = 9)
     private String dni;  // DNI del entrenador, clave primaria
 
     @Column(nullable = false, name = "username", unique = true)
