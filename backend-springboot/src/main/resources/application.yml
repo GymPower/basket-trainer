@@ -1,6 +1,6 @@
 # Configuración del servidor Spring Boot
 server:
-  port: ${PORT:8080}  # Puerto en el que corre la aplicación (8080 por defecto)
+  port: ${PORT}  # Puerto en el que corre la aplicación (8080 por defecto)
 
 # Configuración de la base de datos y JPA
 spring:
