@@ -11,5 +11,5 @@ data class TrainerRequest(
     @SerializedName("surname2") val secondSurname: String? = null,
     @SerializedName("birthdate") val birthdate: String? = null,
     @SerializedName("email") val email: String? = null,
-    @SerializedName("phone") val telephone: String? = null
+    @SerializedName("telephone") val telephone: String? = null
 )
