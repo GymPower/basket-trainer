@@ -2,55 +2,23 @@ package com.example.mybaskettrainer.ui.screens
 
 import android.widget.Toast
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.mybaskettrainer.R
 import com.example.mybaskettrainer.data.model.Player
 import com.example.mybaskettrainer.data.remote.ApiClient
-import com.example.mybaskettrainer.ui.theme.MyBasketTrainerTheme
+import com.example.mybaskettrainer.navigation.Routes
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -65,6 +33,7 @@ fun PlayersScreen(navController: NavHostController, trainerDni: String) {
     var teamFilter by remember { mutableStateOf("") }
     var menuExpanded by remember { mutableStateOf(false) }
 
+    // Cargar la lista de jugadores
     LaunchedEffect(Unit) {
         if (trainerDni.isEmpty()) {
             Toast.makeText(context, "Error: Trainer DNI not provided", Toast.LENGTH_LONG).show()
@@ -99,21 +68,27 @@ fun PlayersScreen(navController: NavHostController, trainerDni: String) {
                 title = { Text(stringResource(R.string.my_players)) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = "Volver")
+                        Icon(
+                            Icons.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.back)
+                        )
                     }
                 },
                 actions = {
                     IconButton(onClick = { menuExpanded = true }) {
-                        Icon(Icons.Filled.Menu, contentDescription = "Menú")
+                        Icon(
+                            Icons.Filled.Menu,
+                            contentDescription = stringResource(R.string.menu)
+                        )
                     }
                     DropdownMenu(
                         expanded = menuExpanded,
                         onDismissRequest = { menuExpanded = false }
                     ) {
                         DropdownMenuItem(
-                            text = { Text("Pantalla Principal") },
+                            text = { Text(stringResource(R.string.main_screen)) },
                             onClick = {
-                                navController.navigate("mainScreen/$trainerDni") {
+                                navController.navigate(Routes.MainScreen.createRoute(trainerDni)) {
                                     popUpTo(navController.graph.startDestinationId) { inclusive = false }
                                     launchSingleTop = true
                                 }
@@ -121,9 +96,9 @@ fun PlayersScreen(navController: NavHostController, trainerDni: String) {
                             }
                         )
                         DropdownMenuItem(
-                            text = { Text("Equipos") },
+                            text = { Text(stringResource(R.string.teams)) },
                             onClick = {
-                                navController.navigate("teamScreen/$trainerDni") {
+                                navController.navigate(Routes.TeamScreen.createRoute(trainerDni)) {
                                     popUpTo(navController.graph.startDestinationId) { inclusive = false }
                                     launchSingleTop = true
                                 }
@@ -131,14 +106,14 @@ fun PlayersScreen(navController: NavHostController, trainerDni: String) {
                             }
                         )
                         DropdownMenuItem(
-                            text = { Text("Jugadores") },
+                            text = { Text(stringResource(R.string.players)) },
                             enabled = false,
                             onClick = {}
                         )
                         DropdownMenuItem(
-                            text = { Text("Agenda") },
+                            text = { Text(stringResource(R.string.agenda)) },
                             onClick = {
-                                navController.navigate("agendaScreen") {
+                                navController.navigate(Routes.AgendaScreen.route) {
                                     popUpTo(navController.graph.startDestinationId) { inclusive = false }
                                     launchSingleTop = true
                                 }
@@ -146,9 +121,9 @@ fun PlayersScreen(navController: NavHostController, trainerDni: String) {
                             }
                         )
                         DropdownMenuItem(
-                            text = { Text("Marcador") },
+                            text = { Text(stringResource(R.string.scoreboard)) },
                             onClick = {
-                                navController.navigate("scoreboardScreen") {
+                                navController.navigate(Routes.ScoreboardScreen.route) {
                                     popUpTo(navController.graph.startDestinationId) { inclusive = false }
                                     launchSingleTop = true
                                 }
@@ -156,9 +131,9 @@ fun PlayersScreen(navController: NavHostController, trainerDni: String) {
                             }
                         )
                         DropdownMenuItem(
-                            text = { Text("Pizarra Táctica") },
+                            text = { Text(stringResource(R.string.tactics_board)) },
                             onClick = {
-                                navController.navigate("tacticsBoard") {
+                                navController.navigate(Routes.TacticsBoardScreen.route) {
                                     popUpTo(navController.graph.startDestinationId) { inclusive = false }
                                     launchSingleTop = true
                                 }
@@ -171,10 +146,13 @@ fun PlayersScreen(navController: NavHostController, trainerDni: String) {
         },
         floatingActionButton = {
             Button(
-                onClick = { navController.navigate("addEditPlayerScreen") },
+                onClick = { navController.navigate(Routes.AddEditPlayerScreen.createRoute(null, trainerDni)) },
                 modifier = Modifier.padding(16.dp)
             ) {
-                Icon(Icons.Filled.Add, contentDescription = "Add Player")
+                Icon(
+                    Icons.Filled.Add,
+                    contentDescription = stringResource(R.string.add_player)
+                )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(stringResource(R.string.add_player))
             }
@@ -186,7 +164,7 @@ fun PlayersScreen(navController: NavHostController, trainerDni: String) {
                 .padding(paddingValues)
                 .padding(horizontal = 16.dp)
         ) {
-// Filtros de búsqueda
+            // Filtros de búsqueda
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -198,7 +176,12 @@ fun PlayersScreen(navController: NavHostController, trainerDni: String) {
                     onValueChange = { searchQuery = it },
                     label = { Text(stringResource(R.string.search_by_name)) },
                     modifier = Modifier.weight(1f),
-                    leadingIcon = { Icon(Icons.Filled.Search, contentDescription = "Search") },
+                    leadingIcon = {
+                        Icon(
+                            Icons.Filled.Search,
+                            contentDescription = stringResource(R.string.search_by_name)
+                        )
+                    },
                     singleLine = true
                 )
             }
@@ -224,7 +207,7 @@ fun PlayersScreen(navController: NavHostController, trainerDni: String) {
                 )
             }
 
-// Lista de jugadores
+            // Lista de jugadores
             if (isLoading.value) {
                 Column(
                     modifier = Modifier.fillMaxSize(),
@@ -244,7 +227,7 @@ fun PlayersScreen(navController: NavHostController, trainerDni: String) {
                         style = MaterialTheme.typography.bodyLarge
                     )
                     Spacer(modifier = Modifier.height(16.dp))
-                    Button(onClick = { navController.navigate("addEditPlayerScreen") }) {
+                    Button(onClick = { navController.navigate(Routes.AddEditPlayerScreen.createRoute(null, trainerDni)) }) {
                         Text(stringResource(R.string.add_player))
                     }
                 }
@@ -256,7 +239,7 @@ fun PlayersScreen(navController: NavHostController, trainerDni: String) {
                     items(filteredPlayers) { player ->
                         PlayerCard(
                             player = player,
-                            onClick = { navController.navigate("playerDetailScreen/${player.playerId}") }
+                            onClick = { navController.navigate(Routes.PlayerDetailScreen.createRoute(player.playerId)) }
                         )
                     }
                 }
@@ -286,7 +269,7 @@ fun PlayerCard(player: Player, onClick: () -> Unit) {
                     style = MaterialTheme.typography.titleMedium
                 )
                 Text(
-                    text = "${stringResource(R.string.category)}: ${player.category}",
+                    text = "${stringResource(R.string.category)}: ${player.category ?: "N/A"}",
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Text(
@@ -295,14 +278,5 @@ fun PlayerCard(player: Player, onClick: () -> Unit) {
                 )
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PlayerScreenPreview() {
-    val fakeNavController = rememberNavController()
-    MyBasketTrainerTheme {
-        PlayersScreen(navController = fakeNavController, trainerDni = "12345678A")
     }
 }

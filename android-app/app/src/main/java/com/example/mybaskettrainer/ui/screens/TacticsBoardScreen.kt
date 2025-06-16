@@ -20,6 +20,7 @@ import androidx.navigation.NavHostController
 import com.example.mybaskettrainer.R
 import androidx.compose.foundation.Image
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.example.mybaskettrainer.ui.theme.MyBasketTrainerTheme
@@ -36,22 +37,22 @@ fun TacticsBoardScreen(navController: NavHostController) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Pizarra Táctica") },
+                title = { Text(stringResource(R.string.tactics_board)) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = "Volver")
+                        Icon(Icons.Filled.ArrowBack, contentDescription = (stringResource(R.string.back)))
                     }
                 },
                 actions = {
                     IconButton(onClick = { menuExpanded = true }) {
-                        Icon(Icons.Filled.Menu, contentDescription = "Menú")
+                        Icon(Icons.Filled.Menu, contentDescription = (stringResource(R.string.menu)))
                     }
                     DropdownMenu(
                         expanded = menuExpanded,
                         onDismissRequest = { menuExpanded = false }
                     ) {
                         DropdownMenuItem(
-                            text = { Text("Pantalla Principal") },
+                            text = { Text((stringResource(R.string.main_screen))) },
                             onClick = {
                                 navController.navigate("main_screen") {
                                     popUpTo(navController.graph.startDestinationId) {
@@ -63,7 +64,7 @@ fun TacticsBoardScreen(navController: NavHostController) {
                             }
                         )
                         DropdownMenuItem(
-                            text = { Text("Equipos") },
+                            text = { Text((stringResource(R.string.teams))) },
                             onClick = {
                                 navController.navigate("team_screen") {
                                     popUpTo(navController.graph.startDestinationId) {
@@ -75,7 +76,7 @@ fun TacticsBoardScreen(navController: NavHostController) {
                             }
                         )
                         DropdownMenuItem(
-                            text = { Text("Jugadores") },
+                            text = { Text(stringResource(R.string.players)) },
                             onClick = {
                                 navController.navigate("player_screen") {
                                     popUpTo(navController.graph.startDestinationId) {
@@ -87,7 +88,7 @@ fun TacticsBoardScreen(navController: NavHostController) {
                             }
                         )
                         DropdownMenuItem(
-                            text = { Text("Agenda") },
+                            text = { Text(stringResource(R.string.agenda)) },
                             onClick = {
                                 navController.navigate("agenda_screen") {
                                     popUpTo(navController.graph.startDestinationId) {
@@ -99,7 +100,7 @@ fun TacticsBoardScreen(navController: NavHostController) {
                             }
                         )
                         DropdownMenuItem(
-                            text = { Text("Marcador") },
+                            text = { Text(stringResource(R.string.scoreboard)) },
                             onClick = {
                                 navController.navigate("scoreboard_screen") {
                                     popUpTo(navController.graph.startDestinationId) {
@@ -111,7 +112,7 @@ fun TacticsBoardScreen(navController: NavHostController) {
                             }
                         )
                         DropdownMenuItem(
-                            text = { Text("Pizarra Táctica") },
+                            text = { Text(stringResource(R.string.scoreboard)) },
                             enabled = false,
                             onClick = {}
                         )
@@ -186,19 +187,19 @@ fun TacticsBoardScreen(navController: NavHostController) {
                     modifier = Modifier.weight(1f),
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
                 ) {
-                    Text("Rojo")
+                    Text(stringResource(R.string.red))
                 }
                 Button(onClick = { currentColor = Color.Blue },
                     modifier = Modifier.weight(1f),
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Blue)
                 ) {
-                    Text("Azul")
+                    Text(stringResource(R.string.blue))
                 }
                 Button(onClick = { currentColor = Color.Green },
                     modifier = Modifier.weight(1f),
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Green)
                 ) {
-                    Text("Verde")
+                    Text(stringResource(R.string.green))
                 }
             }
 
@@ -210,7 +211,7 @@ fun TacticsBoardScreen(navController: NavHostController) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Icon(Icons.Filled.Clear, contentDescription = "Limpiar")
-                Text("Limpiar Pizarra")
+                Text(stringResource(R.string.clear_board))
             }
         }
     }

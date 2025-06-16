@@ -13,7 +13,6 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "player")
 public class Player {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "player_id")
@@ -41,10 +40,10 @@ public class Player {
     private String category;  // Categoría del jugador
 
     @ManyToOne
-    @JoinColumn(name = "trainer_dni", columnDefinition = "VARCHAR(9)")
+    @JoinColumn(name = "trainer_dni", referencedColumnName = "trainer_dni", nullable = true)
     private Trainer trainer;  // Relación muchos-a-uno con el entrenador
 
     @ManyToOne
-    @JoinColumn(name = "team_id")
+    @JoinColumn(name = "team_id", nullable = true)
     private Team team;  // Relación muchos-a-uno con el equipo
 }

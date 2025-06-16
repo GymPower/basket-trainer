@@ -30,14 +30,16 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = vi
     val errorMessage by remember { derivedStateOf { viewModel.errorMessage } }
     val trainerDni by viewModel.trainerDni.collectAsState()
 
+    // Redirigir a la pantalla principal si el login es exitoso
     LaunchedEffect(trainerDni) {
         if (trainerDni != null) {
-            navController.navigate("mainScreen") {
-                popUpTo("loginScreen") { inclusive = true }
+            navController.navigate(Routes.MainScreen.createRoute(trainerDni!!)) {
+                popUpTo(Routes.LoginScreen.route) { inclusive = true }
             }
         }
     }
 
+    // Mostrar mensaje de error si lo hay
     LaunchedEffect(errorMessage) {
         errorMessage?.let {
             Toast.makeText(context, it, Toast.LENGTH_LONG).show()
@@ -49,7 +51,6 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = vi
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
             .padding(32.dp),
-
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -109,8 +110,7 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = vi
         }
     }
 }
-
-@Preview(showBackground = true, name = "Login Preview")
+@Preview(showBackground = true)
 @Composable
 fun LoginScreenPreview() {
     val fakeNavController = rememberNavController()

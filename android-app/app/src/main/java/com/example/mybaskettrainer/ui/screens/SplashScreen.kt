@@ -9,7 +9,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
+import com.example.mybaskettrainer.R
 import com.example.mybaskettrainer.navigation.Routes
 import kotlinx.coroutines.delay
 
@@ -22,7 +24,7 @@ fun SplashScreen(navController: NavHostController) {
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = "MyBasketTrainer",
+            text = stringResource(R.string.app_name),
             color = Color.White
         )
     }

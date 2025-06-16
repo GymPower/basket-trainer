@@ -1,31 +1,9 @@
-package com.example.mybaskettrainer.ui.screens
-
 import android.widget.Toast
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -37,22 +15,23 @@ import androidx.navigation.compose.rememberNavController
 import com.example.mybaskettrainer.R
 import com.example.mybaskettrainer.data.model.Team
 import com.example.mybaskettrainer.data.remote.ApiClient
+import com.example.mybaskettrainer.navigation.Routes
 import com.example.mybaskettrainer.ui.theme.MyBasketTrainerTheme
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TeamDetailScreen(teamId: Int, trainerDni: String = "12345678Z", navController: NavHostController) { // Añadido trainerDni
+fun TeamDetailScreen(teamId: Int, trainerDni: String, navController: NavHostController) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val teamState = remember { mutableStateOf<Team?>(null) }
     val isLoading = remember { mutableStateOf(true) }
 
-// Cargar detalles del equipo
+    // Cargar detalles del equipo
     LaunchedEffect(teamId) {
         isLoading.value = true
         try {
-            val response = ApiClient.teamApi.getTeamsByTrainer(trainerDni) // Usar getTeamsByTrainer
+            val response = ApiClient.teamApi.getTeamsByTrainer(trainerDni)
             if (response.isSuccessful) {
                 teamState.value = response.body()?.find { it.teamId == teamId }
             } else {
@@ -70,7 +49,10 @@ fun TeamDetailScreen(teamId: Int, trainerDni: String = "12345678Z", navControlle
                 title = { Text(stringResource(R.string.team_details)) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(
+                            Icons.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.back)
+                        )
                     }
                 }
             )
@@ -130,7 +112,7 @@ fun TeamDetailScreen(teamId: Int, trainerDni: String = "12345678Z", navControlle
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Button(
-                        onClick = { navController.navigate("addEditTeamScreen/${team.teamId}/$trainerDni") }, // Pasar trainerDni
+                        onClick = { navController.navigate(Routes.AddEditTeamScreen.createRoute(team.teamId.toString(), trainerDni)) },
                         modifier = Modifier.weight(1f)
                     ) {
                         Text(stringResource(R.string.edit))
@@ -161,12 +143,11 @@ fun TeamDetailScreen(teamId: Int, trainerDni: String = "12345678Z", navControlle
         }
     }
 }
-
 @Preview(showBackground = true)
 @Composable
-fun TeamDetailScreenPreview() {
+fun TeamDetailScreenScreenPreview() {
     val fakeNavController = rememberNavController()
     MyBasketTrainerTheme {
-        TeamDetailScreen(teamId = 1, trainerDni = "12345678Z", navController = fakeNavController)
+        TeamDetailScreen(teamId = 1, navController = fakeNavController,  trainerDni = "12345678A")
     }
 }

@@ -27,6 +27,7 @@
     <string name="birthdate">Fecha de nacimiento (yyyy-mm-dd)</string>
     <string name="phone">Teléfono</string>
     <string name="email">Email</string>
+    <string name="text_to_login">¿Ya tienes una cuenta? Inicia sesión</string>
 
     //MainScreen
     <string name="my_teams">Mis equipos</string>
@@ -60,9 +61,13 @@
     <string name="team_created">Equipo creado satisfactoriamente</string>
     <string name="team_updated">Equipo actualizado satisfactoriamente</string>
     <string name="team_deleted">Equipo eliminado satisfactoriamente</string>
-    <string name="required_fields">Nombre de la categorría requerido</string>
+    <string name="required_fields">Nombre de la categoría requerido</string>
     <string name="save">Guardar</string>
     <string name="create">Crear</string>
+    <string name="team_image">Imagen del Equipo</string>
+    <string name="add_to_favorites">Añadir a Favoritos</string>
+    <string name="remove_from_favorites">Eliminar de Favoritos</string>
+
 
     //PlayerScreen
     <string name="error_loading_players">Error cargando jugadores</string>
@@ -79,7 +84,7 @@
     <string name="invalid_player_id">Invalido ID del Jugador</string>
     <string name="team_optional">ID del equipo (opcional)</string>
     <string name="player_updated">Jugador actualizado</string>
-
+    <string name="trainer_dni_error">Error: DNI del entrenador no proporcionado</string>
 
 
 
@@ -98,7 +103,7 @@
     <string name="edit_player">Editar Jugador</string>
     <string name="no_events_found">No hay eventos</string>
     <string name="delete_event">Evento eliminado</string>
-
+    <string name="event_details">Detalles del Evento</string>
 
 
 
@@ -107,8 +112,30 @@
     <string name="go_back">Ir atrás</string>
     <string name="event_not_found">Evento no encontrado</string>
     <string name="invalid_team_id">ID Equipo inválid</string>
+    <string name="invalid_format">Formato inválido</string>
+    <string name="player_created">Jugador creado satisfactoriamente</string>
+    <string name="error_creating_player">Error creando jugador</string>
+    <string name="error_updating_player">Error actualizando jugador</string>
+    <string name="registration_success">Registro exitoso</string>
+    <string name="registration_error">Error durante el registro</string>
+    <string name="invalid_credentials">Usuario o contraseña incorrectos</string>
 
+    //Scoreboard
+    <string name="home_team">Local</string>
+    <string name="away_team">Visitante</string>
+    <string name="plus_one">+1</string>
+    <string name="plus_two">+2</string>
+    <string name="plus_three">+3</string>
+    <string name="minus_one">-1</string>
+    <string name="scoreboard_reset">Marcador reiniciado</string>
+    <string name="reset_scoreboard">Reiniciar Marcador</string>
 
+    //tactictsboard
+    <string name="basketball_court">Cancha de baloncesto</string>
+    <string name="red">Rojo</string>
+    <string name="blue">Azul</string>
+    <string name="green">Verde</string>
+    <string name="clear_board">Limpiar Pizarra</string>
 
 
 </resources>

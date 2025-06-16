@@ -12,5 +12,5 @@ interface AuthApi {
     suspend fun login(@Body request: LoginRequest): Response<LoginResponse>
 
     @POST("auth/register")
-    suspend fun registerTrainer(@Body trainerRequest: TrainerRequest): Response<TrainerRequest>
+    suspend fun registerTrainer(@Body trainerRequest: TrainerRequest): Response<LoginResponse>
 }

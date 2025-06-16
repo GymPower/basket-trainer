@@ -1,31 +1,11 @@
-package com.example.mybaskettrainer.ui.screens
+
 import android.widget.Toast
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material3.Button
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -39,6 +19,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.mybaskettrainer.R
 import com.example.mybaskettrainer.data.local.ScoreboardStorage
 import com.example.mybaskettrainer.data.model.Scoreboard
+import com.example.mybaskettrainer.navigation.Routes
 import com.example.mybaskettrainer.ui.theme.MyBasketTrainerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,6 +29,7 @@ fun ScoreboardScreen(navController: NavHostController) {
     var scoreboard by remember { mutableStateOf(ScoreboardStorage.getScoreboard()) }
     var menuExpanded by remember { mutableStateOf(false) }
 
+    // Función para actualizar el marcador
     fun updateScoreboard() {
         scoreboard = ScoreboardStorage.getScoreboard()
     }
@@ -55,24 +37,30 @@ fun ScoreboardScreen(navController: NavHostController) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(R.string.my_players)) },
+                title = { Text(stringResource(R.string.scoreboard)) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = "Volver")
+                        Icon(
+                            Icons.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.back)
+                        )
                     }
                 },
                 actions = {
                     IconButton(onClick = { menuExpanded = true }) {
-                        Icon(Icons.Filled.Menu, contentDescription = "Menú")
+                        Icon(
+                            Icons.Filled.Menu,
+                            contentDescription = stringResource(R.string.menu)
+                        )
                     }
                     DropdownMenu(
                         expanded = menuExpanded,
                         onDismissRequest = { menuExpanded = false }
                     ) {
                         DropdownMenuItem(
-                            text = { Text("Pantalla Principal") },
+                            text = { Text(stringResource(R.string.main_screen)) },
                             onClick = {
-                                navController.navigate("main_screen") {
+                                navController.navigate(Routes.MainScreen.route) {
                                     popUpTo(navController.graph.startDestinationId) { inclusive = false }
                                     launchSingleTop = true
                                 }
@@ -80,9 +68,9 @@ fun ScoreboardScreen(navController: NavHostController) {
                             }
                         )
                         DropdownMenuItem(
-                            text = { Text("Equipos") },
+                            text = { Text(stringResource(R.string.teams)) },
                             onClick = {
-                                navController.navigate("team_screen") {
+                                navController.navigate(Routes.TeamScreen.route) {
                                     popUpTo(navController.graph.startDestinationId) { inclusive = false }
                                     launchSingleTop = true
                                 }
@@ -90,21 +78,9 @@ fun ScoreboardScreen(navController: NavHostController) {
                             }
                         )
                         DropdownMenuItem(
-                            text = { Text("Jugadores") },
+                            text = { Text(stringResource(R.string.players)) },
                             onClick = {
-                                navController.navigate("player_screen") {
-                                    popUpTo(navController.graph.startDestinationId) {
-                                        inclusive = false
-                                    }
-                                    launchSingleTop = true
-                                }
-                                menuExpanded = false
-                            }
-                        )
-                        DropdownMenuItem(
-                            text = { Text("Agenda") },
-                            onClick = {
-                                navController.navigate("agenda_screen") {
+                                navController.navigate(Routes.PlayerScreen.route) {
                                     popUpTo(navController.graph.startDestinationId) { inclusive = false }
                                     launchSingleTop = true
                                 }
@@ -112,14 +88,24 @@ fun ScoreboardScreen(navController: NavHostController) {
                             }
                         )
                         DropdownMenuItem(
-                            text = { Text("Marcador") },
+                            text = { Text(stringResource(R.string.agenda)) },
+                            onClick = {
+                                navController.navigate(Routes.AgendaScreen.route) {
+                                    popUpTo(navController.graph.startDestinationId) { inclusive = false }
+                                    launchSingleTop = true
+                                }
+                                menuExpanded = false
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text(stringResource(R.string.scoreboard)) },
                             enabled = false,
                             onClick = {}
                         )
                         DropdownMenuItem(
-                            text = { Text("Pizarra Táctica") },
+                            text = { Text(stringResource(R.string.tactics_board)) },
                             onClick = {
-                                navController.navigate("tactics_board") {
+                                navController.navigate(Routes.TacticsBoardScreen.route) {
                                     popUpTo(navController.graph.startDestinationId) { inclusive = false }
                                     launchSingleTop = true
                                 }
@@ -129,7 +115,7 @@ fun ScoreboardScreen(navController: NavHostController) {
                     }
                 }
             )
-        },
+        }
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -146,7 +132,7 @@ fun ScoreboardScreen(navController: NavHostController) {
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
-                        text = "Home",
+                        text = stringResource(R.string.home_team),
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold
                     )
@@ -162,15 +148,14 @@ fun ScoreboardScreen(navController: NavHostController) {
                             ScoreboardStorage.updateHomeScore(scoreboard.homeScore + 1)
                             updateScoreboard()
                         }) {
-                            Text("+1")
+                            Text(stringResource(R.string.plus_one))
                         }
                         Button(onClick = {
                             ScoreboardStorage.updateHomeScore(scoreboard.homeScore + 2)
                             updateScoreboard()
                         }) {
-                            Text("+2")
+                            Text(stringResource(R.string.plus_two))
                         }
-
                     }
                     Spacer(modifier = Modifier.height(8.dp))
                     Row(
@@ -180,16 +165,15 @@ fun ScoreboardScreen(navController: NavHostController) {
                             ScoreboardStorage.updateHomeScore(scoreboard.homeScore + 3)
                             updateScoreboard()
                         }) {
-                            Text("+3")
+                            Text(stringResource(R.string.plus_three))
                         }
                         Button(onClick = {
                             ScoreboardStorage.updateHomeScore(scoreboard.homeScore - 1)
                             updateScoreboard()
                         }) {
-                            Text("-1")
+                            Text(stringResource(R.string.minus_one))
                         }
                     }
-
                 }
 
                 Text(
@@ -200,7 +184,7 @@ fun ScoreboardScreen(navController: NavHostController) {
 
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
-                        text = "Away",
+                        text = stringResource(R.string.away_team),
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold
                     )
@@ -216,15 +200,14 @@ fun ScoreboardScreen(navController: NavHostController) {
                             ScoreboardStorage.updateAwayScore(scoreboard.awayScore + 1)
                             updateScoreboard()
                         }) {
-                            Text("+1")
+                            Text(stringResource(R.string.plus_one))
                         }
                         Button(onClick = {
                             ScoreboardStorage.updateAwayScore(scoreboard.awayScore + 2)
                             updateScoreboard()
                         }) {
-                            Text("+2")
+                            Text(stringResource(R.string.plus_two))
                         }
-
                     }
                     Spacer(modifier = Modifier.height(8.dp))
                     Row(
@@ -234,16 +217,15 @@ fun ScoreboardScreen(navController: NavHostController) {
                             ScoreboardStorage.updateAwayScore(scoreboard.awayScore + 3)
                             updateScoreboard()
                         }) {
-                            Text("+3")
+                            Text(stringResource(R.string.plus_three))
                         }
                         Button(onClick = {
                             ScoreboardStorage.updateAwayScore(scoreboard.awayScore - 1)
                             updateScoreboard()
                         }) {
-                            Text("-1")
+                            Text(stringResource(R.string.minus_one))
                         }
                     }
-
                 }
             }
 
@@ -256,7 +238,7 @@ fun ScoreboardScreen(navController: NavHostController) {
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Reset Scoreboard")
+                Text(stringResource(R.string.reset_scoreboard))
             }
         }
     }

@@ -2,29 +2,11 @@ package com.example.mybaskettrainer.ui.screens
 
 import android.content.Context
 import android.widget.Toast
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -36,12 +18,13 @@ import androidx.navigation.compose.rememberNavController
 import com.example.mybaskettrainer.R
 import com.example.mybaskettrainer.data.model.Team
 import com.example.mybaskettrainer.data.remote.ApiClient
+import com.example.mybaskettrainer.navigation.Routes
 import com.example.mybaskettrainer.ui.theme.MyBasketTrainerTheme
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddEditTeamScreen(teamId: String? = null, trainerDni: String = "12345678Z", navController: NavHostController) { // Añadido trainerDni como parámetro opcional
+fun AddEditTeamScreen(teamId: String? = null, trainerDni: String, navController: NavHostController) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val name = remember { mutableStateOf("") }
@@ -51,6 +34,7 @@ fun AddEditTeamScreen(teamId: String? = null, trainerDni: String = "12345678Z", 
     val parsedTeamId = teamId?.toIntOrNull()
     val isEditMode = parsedTeamId != null
 
+    // Validar el ID del equipo en modo edición
     if (isEditMode && parsedTeamId == null) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -70,6 +54,7 @@ fun AddEditTeamScreen(teamId: String? = null, trainerDni: String = "12345678Z", 
         return
     }
 
+    // Cargar datos del equipo si es modo edición
     LaunchedEffect(parsedTeamId) {
         if (isEditMode) {
             isLoading.value = true
@@ -93,10 +78,18 @@ fun AddEditTeamScreen(teamId: String? = null, trainerDni: String = "12345678Z", 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(if (isEditMode) stringResource(R.string.edit_team) else stringResource(R.string.add_team)) },
+                title = {
+                    Text(
+                        if (isEditMode) stringResource(R.string.edit_team)
+                        else stringResource(R.string.add_team)
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
+                        Icon(
+                            Icons.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.back)
+                        )
                     }
                 }
             )
@@ -166,13 +159,17 @@ fun AddEditTeamScreen(teamId: String? = null, trainerDni: String = "12345678Z", 
                     modifier = Modifier.fillMaxWidth(),
                     enabled = !isLoading.value
                 ) {
-                    Text(if (isEditMode) stringResource(R.string.save) else stringResource(R.string.create))
+                    Text(
+                        if (isEditMode) stringResource(R.string.save)
+                        else stringResource(R.string.create)
+                    )
                 }
             }
         }
     }
 }
 
+// Función para guardar o actualizar un equipo
 suspend fun saveOrUpdateTeam(
     context: Context,
     isEditMode: Boolean,
@@ -214,13 +211,11 @@ suspend fun saveOrUpdateTeam(
         Toast.makeText(context, "Connection error: ${e.message}", Toast.LENGTH_SHORT).show()
     }
 }
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
-fun AddEditTeamScreenPreview() {
+fun AddEditTeamsScreenPreview() {
     val fakeNavController = rememberNavController()
     MyBasketTrainerTheme {
-        AddEditTeamScreen(teamId = null, trainerDni = "12345678Z", navController = fakeNavController)
+        AddEditTeamScreen(teamId = "1", trainerDni = "DniPreview", navController = fakeNavController)
     }
 }

@@ -2,29 +2,14 @@ package com.example.mybaskettrainer.ui.screens
 
 import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -42,186 +27,177 @@ import com.example.mybaskettrainer.navigation.Routes
 import com.example.mybaskettrainer.ui.theme.MyBasketTrainerTheme
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(navController: NavHostController) {
-    var dni by remember { mutableStateOf("") }
-    var name by remember { mutableStateOf("") }
-    var surname1 by remember { mutableStateOf("") }
-    var surname2 by remember { mutableStateOf("") }
-    var birthdate by remember { mutableStateOf("") }
-    var phone by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var dni by remember { mutableStateOf("") }
+    var name by remember { mutableStateOf("") }
+    var firstSurname by remember { mutableStateOf("") }
+    var secondSurname by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var telephone by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(false) }
 
-    val scope = rememberCoroutineScope()
-    val context = LocalContext.current
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(2.dp)
-            .background(MaterialTheme.colorScheme.background),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = stringResource(R.string.trainer_register),
-            style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.onBackground
-        )
-
-        OutlinedTextField(
-            value = dni,
-            onValueChange = { dni = it },
-            label = { Text(text = stringResource(R.string.dni), color = MaterialTheme.colorScheme.onSurface) },
-            placeholder = { Text("Ej: 12345678Z", color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)) },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            enabled = !isLoading
-        )
-        OutlinedTextField(
-            value = name,
-            onValueChange = { name = it },
-            label = { Text(text = stringResource(R.string.name), color = MaterialTheme.colorScheme.onSurface) },
-            placeholder = { Text("Ej: Juan", color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)) },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            enabled = !isLoading
-        )
-        OutlinedTextField(
-            value = surname1,
-            onValueChange = { surname1 = it },
-            label = { Text(text = stringResource(R.string.first_surname), color = MaterialTheme.colorScheme.onSurface) },
-            placeholder = { Text("Ej: Pérez", color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)) },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            enabled = !isLoading
-        )
-        OutlinedTextField(
-            value = surname2,
-            onValueChange = { surname2 = it },
-            label = { Text(text = stringResource(R.string.second_surname), color = MaterialTheme.colorScheme.onSurface) },
-            placeholder = { Text("Ej: González (opcional)", color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)) },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            enabled = !isLoading
-        )
-        OutlinedTextField(
-            value = birthdate,
-            onValueChange = { birthdate = it },
-            label = { Text(text = stringResource(R.string.birthdate), color = MaterialTheme.colorScheme.onSurface) },
-            placeholder = { Text("Ej: YYYY-MM-DD", color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)) },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            enabled = !isLoading
-        )
-        OutlinedTextField(
-            value = phone,
-            onValueChange = { phone = it },
-            label = { Text(text = stringResource(R.string.phone), color = MaterialTheme.colorScheme.onSurface) },
-            placeholder = { Text("Ej: 123456789", color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)) },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-            enabled = !isLoading
-        )
-        OutlinedTextField(
-            value = email,
-            onValueChange = { email = it },
-            label = { Text(text = stringResource(R.string.email), color = MaterialTheme.colorScheme.onSurface) },
-            placeholder = { Text("Ej: usuario@ejemplo.com", color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)) },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-            enabled = !isLoading
-        )
-        OutlinedTextField(
-            value = username,
-            onValueChange = { username = it },
-            label = { Text(text = stringResource(R.string.user), color = MaterialTheme.colorScheme.onSurface) },
-            placeholder = { Text("Ej: juanperez", color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)) },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            enabled = !isLoading
-        )
-        OutlinedTextField(
-            value = password,
-            onValueChange = { password = it },
-            label = { Text(text = stringResource(R.string.password), color = MaterialTheme.colorScheme.onSurface) },
-            placeholder = { Text("Ej: Contraseña123", color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)) },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            enabled = !isLoading
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Button(
-            onClick = {
-                if (dni.isNotBlank() && username.isNotBlank() && password.isNotBlank() && name.isNotBlank() && surname1.isNotBlank() && birthdate.isNotBlank() && phone.isNotBlank() && email.isNotBlank()) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(stringResource(R.string.register)) },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            Icons.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.back)
+                        )
+                    }
+                }
+            )
+        }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .padding(paddingValues)
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            OutlinedTextField(
+                value = username,
+                onValueChange = { username = it },
+                label = { Text(stringResource(R.string.user)) },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+                enabled = !isLoading
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            OutlinedTextField(
+                value = password,
+                onValueChange = { password = it },
+                label = { Text(stringResource(R.string.password)) },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+                visualTransformation = PasswordVisualTransformation(),
+                enabled = !isLoading
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            OutlinedTextField(
+                value = dni,
+                onValueChange = { dni = it },
+                label = { Text(stringResource(R.string.dni)) },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+                enabled = !isLoading
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            OutlinedTextField(
+                value = name,
+                onValueChange = { name = it },
+                label = { Text(stringResource(R.string.name)) },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+                enabled = !isLoading
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            OutlinedTextField(
+                value = firstSurname,
+                onValueChange = { firstSurname = it },
+                label = { Text(stringResource(R.string.first_surname)) },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+                enabled = !isLoading
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            OutlinedTextField(
+                value = secondSurname,
+                onValueChange = { secondSurname = it },
+                label = { Text(stringResource(R.string.second_surname)) },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+                enabled = !isLoading
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            OutlinedTextField(
+                value = email,
+                onValueChange = { email = it },
+                label = { Text(stringResource(R.string.email)) },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                enabled = !isLoading
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            OutlinedTextField(
+                value = telephone,
+                onValueChange = { telephone = it },
+                label = { Text(stringResource(R.string.phone)) },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+                enabled = !isLoading
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+            Button(
+                onClick = {
+                    if (username.isBlank() || password.isBlank() || dni.isBlank() || name.isBlank() || firstSurname.isBlank()) {
+                        Toast.makeText(context, "Name and category are required", Toast.LENGTH_SHORT).show()
+                        return@Button
+                    }
                     scope.launch {
                         isLoading = true
                         try {
                             val trainerRequest = TrainerRequest(
                                 dni = dni,
-                                name = name,
-                                firstSurname = surname1,
-                                secondSurname = surname2.takeIf { it.isNotBlank() },
-                                birthdate = birthdate,
-                                telephone = phone,
-                                email = email,
                                 username = username,
-                                password = password
+                                password = password,
+                                name = name,
+                                firstSurname = firstSurname,
+                                secondSurname = secondSurname.ifEmpty { null },
+                                email = email.ifEmpty { null },
+                                telephone = telephone.ifEmpty { null }
                             )
                             val response = ApiClient.authApi.registerTrainer(trainerRequest)
-                            isLoading = false
                             if (response.isSuccessful) {
-                                Toast.makeText(context, "Registro exitoso", Toast.LENGTH_LONG).show()
-                                navController.navigate(Routes.LoginScreen.route)
+                                Toast.makeText(context, "Registration successful", Toast.LENGTH_SHORT).show()
+                                navController.navigate(Routes.LoginScreen.route) {
+                                    popUpTo(Routes.RegisterScreen.route) { inclusive = true }
+                                }
                             } else {
-                                Toast.makeText(context, "Error en el registro: ${response.message()}", Toast.LENGTH_LONG).show()
+                                Toast.makeText(context, "Error during registration", Toast.LENGTH_SHORT).show()
                             }
                         } catch (e: Exception) {
-                            isLoading = false
-                            Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+                            Toast.makeText(context, "Connection error:", Toast.LENGTH_SHORT).show()
                         }
+                        isLoading = false
                     }
+                },
+                modifier = Modifier.fillMaxWidth(),
+                enabled = !isLoading
+            ) {
+                if (isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(24.dp),
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
                 } else {
-                    Toast.makeText(context, "Por favor, llena todos los campos requeridos", Toast.LENGTH_LONG).show()
+                    Text(text = stringResource(R.string.register))
                 }
-            },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = !isLoading
-        ) {
-            if (isLoading) {
-                CircularProgressIndicator(
-                    modifier = Modifier.size(24.dp),
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
-            } else {
-                Text(text = stringResource(R.string.register), color = MaterialTheme.colorScheme.onPrimary)
             }
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        TextButton(
-            onClick = {
-                navController.navigate(Routes.LoginScreen.route)
-            },
-            enabled = !isLoading
-        ) {
-            Text(text = stringResource(R.string.text_to_sing_up), color = MaterialTheme.colorScheme.onPrimary)
+            Spacer(modifier = Modifier.height(16.dp))
+            TextButton(
+                onClick = { navController.navigate(Routes.LoginScreen.route) },
+                enabled = !isLoading
+            ) {
+                Text(text = stringResource(R.string.text_to_login))
+            }
         }
     }
 }
-
 @Preview(showBackground = true)
 @Composable
 fun RegisterScreenPreview() {

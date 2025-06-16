@@ -1,43 +1,21 @@
 package com.example.mybaskettrainer.ui.screens
 
 import android.widget.Toast
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.mybaskettrainer.R
 import com.example.mybaskettrainer.data.model.Player
 import com.example.mybaskettrainer.data.remote.ApiClient
-import com.example.mybaskettrainer.ui.theme.MyBasketTrainerTheme
+import com.example.mybaskettrainer.navigation.Routes
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,10 +26,11 @@ fun PlayerDetailScreen(playerId: Int, navController: NavHostController) {
     val playerState = remember { mutableStateOf<Player?>(null) }
     val isLoading = remember { mutableStateOf(true) }
 
+    // Cargar detalles del jugador
     LaunchedEffect(playerId) {
         isLoading.value = true
         try {
-            val response = ApiClient.playerApi.getPlayersByTrainer("Dni trainer")
+            val response = ApiClient.playerApi.getPlayersByTrainer("12345678Z") // TODO: Pasar el trainerDni correcto
             if (response.isSuccessful) {
                 playerState.value = response.body()?.find { it.playerId == playerId }
             } else {
@@ -69,7 +48,10 @@ fun PlayerDetailScreen(playerId: Int, navController: NavHostController) {
                 title = { Text(stringResource(R.string.player_details)) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(
+                            Icons.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.back)
+                        )
                     }
                 }
             )
@@ -108,23 +90,23 @@ fun PlayerDetailScreen(playerId: Int, navController: NavHostController) {
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Text(
-                    text = "${player.name} ${player.firstSurname} ${player.secondSurname} ",
+                    text = "${player.name} ${player.firstSurname} ${player.secondSurname ?: ""}",
                     style = MaterialTheme.typography.headlineMedium
                 )
                 Text(
-                    text = "${stringResource(R.string.birthdate)}: ${player.birthdate}",
+                    text = "${stringResource(R.string.birthdate)}: ${player.birthdate ?: "N/A"}",
                     style = MaterialTheme.typography.bodyLarge
                 )
                 Text(
-                    text = "${stringResource(R.string.email)}: ${player.email}",
+                    text = "${stringResource(R.string.email)}: ${player.email ?: "N/A"}",
                     style = MaterialTheme.typography.bodyLarge
                 )
                 Text(
-                    text = "${stringResource(R.string.phone)}: ${player.telephone}",
+                    text = "${stringResource(R.string.phone)}: ${player.telephone ?: "N/A"}",
                     style = MaterialTheme.typography.bodyLarge
                 )
                 Text(
-                    text = "${stringResource(R.string.category)}: ${player.category}",
+                    text = "${stringResource(R.string.category)}: ${player.category ?: "N/A"}",
                     style = MaterialTheme.typography.bodyLarge
                 )
                 Text(
@@ -137,7 +119,7 @@ fun PlayerDetailScreen(playerId: Int, navController: NavHostController) {
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Button(
-                        onClick = { navController.navigate("addEditPlayerScreen/${player.playerId}") },
+                        onClick = { navController.navigate(Routes.AddEditPlayerScreen.createRoute(player.playerId.toString(), "12345678Z")) }, // TODO: Pasar el trainerDni correcto
                         modifier = Modifier.weight(1f)
                     ) {
                         Text(stringResource(R.string.edit))
@@ -166,14 +148,5 @@ fun PlayerDetailScreen(playerId: Int, navController: NavHostController) {
                 }
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PlayerDetailScreenPreview() {
-    val fakeNavController = rememberNavController()
-    MyBasketTrainerTheme {
-        PlayerDetailScreen(playerId = 1, navController = fakeNavController)
     }
 }

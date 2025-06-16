@@ -4,49 +4,29 @@ import android.content.Context
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.mybaskettrainer.R
 import com.example.mybaskettrainer.data.model.Player
 import com.example.mybaskettrainer.data.model.Team
 import com.example.mybaskettrainer.data.remote.ApiClient
-import com.example.mybaskettrainer.ui.theme.MyBasketTrainerTheme
+import com.example.mybaskettrainer.navigation.Routes
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddEditPlayerScreen(playerId: String? = null, trainerDni: String = "12345678Z", navController: NavHostController) {
+fun AddEditPlayerScreen(playerId: String? = null, trainerDni: String, navController: NavHostController) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val name = remember { mutableStateOf("") }
@@ -62,13 +42,13 @@ fun AddEditPlayerScreen(playerId: String? = null, trainerDni: String = "12345678
     val parsedPlayerId = playerId?.toIntOrNull()
     val isEditMode = parsedPlayerId != null
 
+    // Validar el ID del jugador en modo edición
     if (isEditMode && parsedPlayerId == null) {
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            //
             Text(
                 text = stringResource(R.string.invalid_player_id),
                 style = MaterialTheme.typography.headlineMedium,
@@ -82,17 +62,18 @@ fun AddEditPlayerScreen(playerId: String? = null, trainerDni: String = "12345678
         return
     }
 
+    // Cargar datos del jugador si es modo edición
     LaunchedEffect(parsedPlayerId) {
         if (isEditMode) {
             isLoading.value = true
             try {
-                val response = ApiClient.playerApi.getPlayersByTrainer(trainerDni) // Usar trainerDni pasado
+                val response = ApiClient.playerApi.getPlayersByTrainer(trainerDni)
                 val player = response.body()?.find { it.playerId == parsedPlayerId }
                 if (response.isSuccessful && player != null) {
                     name.value = player.name
                     firstSurname.value = player.firstSurname
                     secondSurname.value = player.secondSurname ?: ""
-                    birthdate.value = player.birthdate?.toString() ?: ""
+                    birthdate.value = player.birthdate ?: ""
                     email.value = player.email ?: ""
                     telephone.value = player.telephone ?: ""
                     category.value = player.category ?: ""
@@ -110,10 +91,18 @@ fun AddEditPlayerScreen(playerId: String? = null, trainerDni: String = "12345678
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(if (isEditMode) stringResource(R.string.edit_player) else stringResource(R.string.add_player)) },
+                title = {
+                    Text(
+                        if (isEditMode) stringResource(R.string.edit_player)
+                        else stringResource(R.string.add_player)
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = stringResource(R.string.go_back))
+                        Icon(
+                            Icons.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.back)
+                        )
                     }
                 }
             )
@@ -223,13 +212,17 @@ fun AddEditPlayerScreen(playerId: String? = null, trainerDni: String = "12345678
                     modifier = Modifier.fillMaxWidth(),
                     enabled = !isLoading.value
                 ) {
-                    Text(if (isEditMode) stringResource(R.string.save) else stringResource(R.string.create))
+                    Text(
+                        if (isEditMode) stringResource(R.string.save)
+                        else stringResource(R.string.create)
+                    )
                 }
             }
         }
     }
 }
 
+// Función para guardar o actualizar un jugador
 suspend fun saveOrUpdatePlayer(
     context: Context,
     isEditMode: Boolean,
@@ -262,7 +255,7 @@ suspend fun saveOrUpdatePlayer(
             name = name,
             firstSurname = firstSurname,
             secondSurname = secondSurname,
-            birthdate = birthdate.toString(),
+            birthdate = birthdate?.toString(),
             email = email,
             telephone = telephone,
             category = category,
@@ -290,15 +283,5 @@ suspend fun saveOrUpdatePlayer(
         }
     } catch (e: Exception) {
         Toast.makeText(context, "Connection error: ${e.message}", Toast.LENGTH_SHORT).show()
-    }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Preview(showBackground = true)
-@Composable
-fun AddEditPlayerScreenPreview() {
-    val fakeNavController = rememberNavController()
-    MyBasketTrainerTheme {
-        AddEditPlayerScreen(navController = fakeNavController, trainerDni = "12345678Z")
     }
 }

@@ -3,39 +3,13 @@ package com.example.mybaskettrainer.ui.screens
 import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -47,8 +21,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.mybaskettrainer.R
 import com.example.mybaskettrainer.data.local.EventStorage
 import com.example.mybaskettrainer.data.model.Event
+import com.example.mybaskettrainer.navigation.Routes
 import com.example.mybaskettrainer.ui.theme.MyBasketTrainerTheme
-
 
 @SuppressLint("RememberReturnType")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -64,21 +38,27 @@ fun AgendaScreen(navController: NavHostController) {
                 title = { Text(stringResource(R.string.agenda)) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
+                        Icon(
+                            Icons.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.back)
+                        )
                     }
                 },
                 actions = {
                     IconButton(onClick = { menuExpanded = true }) {
-                        Icon(Icons.Filled.Menu, contentDescription = stringResource(R.string.menu))
+                        Icon(
+                            Icons.Filled.Menu,
+                            contentDescription = stringResource(R.string.menu)
+                        )
                     }
                     DropdownMenu(
                         expanded = menuExpanded,
                         onDismissRequest = { menuExpanded = false }
                     ) {
                         DropdownMenuItem(
-                            text = { stringResource(R.string.main_screen) },
+                            text = { Text(stringResource(R.string.main_screen)) },
                             onClick = {
-                                navController.navigate("main_screen") {
+                                navController.navigate(Routes.MainScreen.route) {
                                     popUpTo(navController.graph.startDestinationId) { inclusive = false }
                                     launchSingleTop = true
                                 }
@@ -86,9 +66,9 @@ fun AgendaScreen(navController: NavHostController) {
                             }
                         )
                         DropdownMenuItem(
-                            text = { Text(stringResource(R.string.teams) ) },
+                            text = { Text(stringResource(R.string.teams)) },
                             onClick = {
-                                navController.navigate("team_screen") {
+                                navController.navigate(Routes.TeamScreen.route) {
                                     popUpTo(navController.graph.startDestinationId) { inclusive = false }
                                     launchSingleTop = true
                                 }
@@ -96,9 +76,9 @@ fun AgendaScreen(navController: NavHostController) {
                             }
                         )
                         DropdownMenuItem(
-                            text = { Text(stringResource(R.string.players) ) },
+                            text = { Text(stringResource(R.string.players)) },
                             onClick = {
-                                navController.navigate("player_screen") {
+                                navController.navigate(Routes.PlayerScreen.route) {
                                     popUpTo(navController.graph.startDestinationId) { inclusive = false }
                                     launchSingleTop = true
                                 }
@@ -106,14 +86,14 @@ fun AgendaScreen(navController: NavHostController) {
                             }
                         )
                         DropdownMenuItem(
-                            text = { Text(stringResource(R.string.agenda) ) },
+                            text = { Text(stringResource(R.string.agenda)) },
                             enabled = false,
                             onClick = {}
                         )
                         DropdownMenuItem(
-                            text = { Text(stringResource(R.string.scoreboard) ) },
+                            text = { Text(stringResource(R.string.scoreboard)) },
                             onClick = {
-                                navController.navigate("scoreboard_screen") {
+                                navController.navigate(Routes.ScoreboardScreen.route) {
                                     popUpTo(navController.graph.startDestinationId) { inclusive = false }
                                     launchSingleTop = true
                                 }
@@ -121,9 +101,9 @@ fun AgendaScreen(navController: NavHostController) {
                             }
                         )
                         DropdownMenuItem(
-                            text = { Text(stringResource(R.string.tactics_board) ) },
+                            text = { Text(stringResource(R.string.tactics_board)) },
                             onClick = {
-                                navController.navigate("tactics_board") {
+                                navController.navigate(Routes.TacticsBoardScreen.route) {
                                     popUpTo(navController.graph.startDestinationId) { inclusive = false }
                                     launchSingleTop = true
                                 }
@@ -136,10 +116,13 @@ fun AgendaScreen(navController: NavHostController) {
         },
         floatingActionButton = {
             Button(
-                onClick = { navController.navigate("addEditEventScreen") },
+                onClick = { navController.navigate(Routes.AddEditEventScreen.createRoute(null)) },
                 modifier = Modifier.padding(16.dp)
             ) {
-                Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.add_event) )
+                Icon(
+                    Icons.Filled.Add,
+                    contentDescription = stringResource(R.string.add_event)
+                )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(stringResource(R.string.add_event))
             }
@@ -162,7 +145,7 @@ fun AgendaScreen(navController: NavHostController) {
                         style = MaterialTheme.typography.bodyLarge
                     )
                     Spacer(modifier = Modifier.height(16.dp))
-                    Button(onClick = { navController.navigate("addEditEventScreen") }) {
+                    Button(onClick = { navController.navigate(Routes.AddEditEventScreen.createRoute(null)) }) {
                         Text(stringResource(R.string.add_event))
                     }
                 }
@@ -174,8 +157,8 @@ fun AgendaScreen(navController: NavHostController) {
                     items(events) { event ->
                         EventCard(
                             event = event,
-                            onClick = { navController.navigate("eventDetailScreen/${event.id}") },
-                            onEdit = { navController.navigate("addEditEventScreen/${event.id}") },
+                            onClick = { navController.navigate(Routes.EventDetailScreen.createRoute(event.id.toString())) },
+                            onEdit = { navController.navigate(Routes.AddEditEventScreen.createRoute(event.id.toString())) },
                             onDelete = {
                                 EventStorage.deleteEvent(event.id)
                                 events = EventStorage.getEvents()
@@ -215,26 +198,31 @@ fun EventCard(
                     style = MaterialTheme.typography.titleMedium
                 )
                 Text(
-                    text = "Date: ${event.date}",
+                    text = "${stringResource(R.string.date_style)}: ${event.date}",
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Text(
-                    text = "Time: ${event.time}",
+                    text = "${stringResource(R.string.hour_style)}: ${event.time}",
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
             Row {
                 IconButton(onClick = onEdit) {
-                    Icon(Icons.Filled.Edit, contentDescription = stringResource(R.string.edit_event))
+                    Icon(
+                        Icons.Filled.Edit,
+                        contentDescription = stringResource(R.string.edit_event)
+                    )
                 }
                 IconButton(onClick = onDelete) {
-                    Icon(Icons.Filled.Delete, contentDescription = stringResource(R.string.delete_event))
+                    Icon(
+                        Icons.Filled.Delete,
+                        contentDescription = stringResource(R.string.delete_event)
+                    )
                 }
             }
         }
     }
 }
-
 @Preview(showBackground = true)
 @Composable
 fun AgendaScreenPreview() {

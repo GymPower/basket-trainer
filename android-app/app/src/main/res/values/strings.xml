@@ -25,6 +25,7 @@
     <string name="birthdate">Birthdate (yyyy-mm-dd)</string>
     <string name="phone">Phone</string>
     <string name="email">Email</string>
+    <string name="text_to_login">Already have an account? Log in</string>
 
     //MainScreen
     <string name="my_teams">My teams </string>
@@ -60,6 +61,9 @@
     <string name="required_fields">Name and category are required</string>
     <string name="save">Save</string>
     <string name="create">Create</string>
+    <string name="team_image">Team Image</string>
+    <string name="add_to_favorites">Add to Favorites</string>
+    <string name="remove_from_favorites">Remove from Favorites</string>
 
     //PlayerScreen
     <string name="error_loading_players">Error loading players</string>
@@ -77,7 +81,7 @@
     <string name="edit_player">Edit Player</string>
     <string name="team_optional">Team ID (optional)</string>
     <string name="player_updated">Player updated</string>
-
+    <string name="trainer_dni_error">Error: Trainer DNI not provided</string>
 
 
 
@@ -97,7 +101,7 @@
     <string name="event_updated">Event updated</string>
     <string name="no_events_found">No events found</string>
     <string name="delete_event">Delete Event</string>
-
+    <string name="event_details">Event Details</string>
 
 
 
@@ -107,6 +111,31 @@
     <string name="go_back">Go back</string>
     <string name="event_not_found">Event not found</string>
     <string name="invalid_team_id">Invalid Team ID</string>
+    <string name="invalid_format">Invalid format</string>
+    <string name="player_created">Player created successfully</string>
+    <string name="error_creating_player">Error creating player</string>
+    <string name="error_updating_player">Error updating player</string>
+    <string name="registration_success">Registration successful</string>
+    <string name="registration_error">Error during registration</string>
+    <string name="invalid_credentials">Incorrect username or password</string>
+
+    //ScoreBoaard
+    <string name="home_team">Home</string>
+    <string name="away_team">Away</string>
+    <string name="plus_one">+1</string>
+    <string name="plus_two">+2</string>
+    <string name="plus_three">+3</string>
+    <string name="minus_one">-1</string>
+    <string name="scoreboard_reset">Scoreboard reset</string>
+    <string name="reset_scoreboard">Reset Scoreboard</string>
+
+    //tactictsboard
+    <string name="basketball_court">Basketball Court</string>
+    <string name="red">Red</string>
+    <string name="blue">Blue</string>
+    <string name="green">Green</string>
+    <string name="clear_board">Clear Board</string>
+
 
 
 </resources>
