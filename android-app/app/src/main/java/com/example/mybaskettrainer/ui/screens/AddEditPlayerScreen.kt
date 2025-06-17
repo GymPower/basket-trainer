@@ -19,6 +19,7 @@ import com.example.mybaskettrainer.R
 import com.example.mybaskettrainer.data.model.Player
 import com.example.mybaskettrainer.data.model.Team
 import com.example.mybaskettrainer.data.remote.ApiClient
+import com.example.mybaskettrainer.data.remote.dto.PlayerRequest
 import com.example.mybaskettrainer.navigation.Routes
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -39,10 +40,9 @@ fun AddEditPlayerScreen(playerId: String? = null, trainerDni: String, navControl
     val teamId = remember { mutableStateOf("") }
     val isLoading = remember { mutableStateOf(false) }
 
-    val parsedPlayerId = playerId?.toIntOrNull()
+    val parsedPlayerId = playerId?.toLongOrNull()
     val isEditMode = parsedPlayerId != null
 
-    // Validar el ID del jugador en modo edición
     if (isEditMode && parsedPlayerId == null) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -62,7 +62,6 @@ fun AddEditPlayerScreen(playerId: String? = null, trainerDni: String, navControl
         return
     }
 
-    // Cargar datos del jugador si es modo edición
     LaunchedEffect(parsedPlayerId) {
         if (isEditMode) {
             isLoading.value = true
@@ -71,15 +70,15 @@ fun AddEditPlayerScreen(playerId: String? = null, trainerDni: String, navControl
                 val player = response.body()?.find { it.playerId == parsedPlayerId }
                 if (response.isSuccessful && player != null) {
                     name.value = player.name
-                    firstSurname.value = player.firstSurname
-                    secondSurname.value = player.secondSurname ?: ""
+                    firstSurname.value = player.surname1
+                    secondSurname.value = player.surname2 ?: ""
                     birthdate.value = player.birthdate ?: ""
                     email.value = player.email ?: ""
                     telephone.value = player.telephone ?: ""
                     category.value = player.category ?: ""
-                    teamId.value = player.team?.teamId?.toString() ?: ""
+                    teamId.value = player.teamId?.toString() ?: ""
                 } else {
-                    Toast.makeText(context, "Error loading player", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Error loading player: ${response.code()} - ${response.message()}", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 Toast.makeText(context, "Connection error: ${e.message}", Toast.LENGTH_SHORT).show()
@@ -189,6 +188,7 @@ fun AddEditPlayerScreen(playerId: String? = null, trainerDni: String, navControl
                             Toast.makeText(context, "Name and First Surname are required", Toast.LENGTH_SHORT).show()
                             return@Button
                         }
+                        val teamIdLong = teamId.value.toLongOrNull()
                         scope.launch {
                             isLoading.value = true
                             saveOrUpdatePlayer(
@@ -198,11 +198,11 @@ fun AddEditPlayerScreen(playerId: String? = null, trainerDni: String, navControl
                                 name = name.value,
                                 firstSurname = firstSurname.value,
                                 secondSurname = secondSurname.value.ifEmpty { null },
-                                birthdate = birthdate.value.takeIf { it.isNotEmpty() }?.let { LocalDate.parse(it) },
+                                birthdate = birthdate.value.ifEmpty { null },
                                 email = email.value.ifEmpty { null },
                                 telephone = telephone.value.ifEmpty { null },
                                 category = category.value.ifEmpty { null },
-                                teamId = teamId.value.toIntOrNull(),
+                                teamId = teamIdLong,
                                 trainerDni = trainerDni,
                                 navController = navController
                             )
@@ -226,22 +226,22 @@ fun AddEditPlayerScreen(playerId: String? = null, trainerDni: String, navControl
 suspend fun saveOrUpdatePlayer(
     context: Context,
     isEditMode: Boolean,
-    playerId: Int?,
+    playerId: Long?,
     name: String,
     firstSurname: String,
     secondSurname: String?,
-    birthdate: LocalDate?,
+    birthdate: String?,
     email: String?,
     telephone: String?,
     category: String?,
-    teamId: Int?,
+    teamId: Long?,
     trainerDni: String,
     navController: NavHostController
 ) {
     try {
         val team = teamId?.let {
             Team(
-                teamId = it,
+                teamId = it.toInt(),
                 name = "",
                 category = "",
                 league = null,
@@ -250,22 +250,29 @@ suspend fun saveOrUpdatePlayer(
                 isFavorite = false
             )
         }
-        val player = Player(
-            playerId = playerId ?: 0,
+        // Mapear Player a PlayerDTO
+        val playerRequest = PlayerRequest(
+            playerId = playerId,
             name = name,
-            firstSurname = firstSurname,
-            secondSurname = secondSurname,
-            birthdate = birthdate?.toString(),
+            surname1 = firstSurname,
+            surname2 = secondSurname,
+            birthdate = birthdate,
             email = email,
             telephone = telephone,
             category = category,
-            trainerDni = trainerDni,
-            team = team
+            teamId = teamId,
+            trainerDni = trainerDni
         )
+        println("Sending playerRequest: $playerRequest, teamId: $teamId, trainerDni: $trainerDni") // Depuración
         val response = if (isEditMode) {
-            ApiClient.playerApi.updatePlayer(playerId!!, player)
+            ApiClient.playerApi.updatePlayer(playerId!!, playerRequest)
         } else {
-            ApiClient.playerApi.createPlayer(trainerDni, player)
+            // Si teamId es null, notificar al usuario
+            val effectiveTeamId = teamId ?: run {
+                Toast.makeText(context, "Team ID is required to create a player", Toast.LENGTH_SHORT).show()
+                return
+            }
+            ApiClient.playerApi.createPlayer(effectiveTeamId, trainerDni, playerRequest)
         }
         if (response.isSuccessful) {
             Toast.makeText(
@@ -275,13 +282,15 @@ suspend fun saveOrUpdatePlayer(
             ).show()
             navController.popBackStack()
         } else {
+            val errorBody = response.errorBody()?.string() ?: "No error details"
             Toast.makeText(
                 context,
-                if (isEditMode) "Error updating player" else "Error creating player",
-                Toast.LENGTH_SHORT
+                "Error ${response.code()}: ${response.message()} - $errorBody",
+                Toast.LENGTH_LONG
             ).show()
         }
     } catch (e: Exception) {
-        Toast.makeText(context, "Connection error: ${e.message}", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "Connection error: ${e.message}", Toast.LENGTH_LONG).show()
+        e.printStackTrace()
     }
 }

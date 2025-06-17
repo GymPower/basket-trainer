@@ -28,6 +28,12 @@ fun ScoreboardScreen(navController: NavHostController) {
     val context = LocalContext.current
     var scoreboard by remember { mutableStateOf(ScoreboardStorage.getScoreboard()) }
     var menuExpanded by remember { mutableStateOf(false) }
+    val trainerDni by remember {
+        mutableStateOf(
+            navController.previousBackStackEntry?.arguments?.getString("trainerDni")
+                ?: navController.currentBackStackEntry?.arguments?.getString("trainerDni") ?: ""
+        )
+    }
 
     // Función para actualizar el marcador
     fun updateScoreboard() {
@@ -70,7 +76,7 @@ fun ScoreboardScreen(navController: NavHostController) {
                         DropdownMenuItem(
                             text = { Text(stringResource(R.string.teams)) },
                             onClick = {
-                                navController.navigate(Routes.TeamScreen.route) {
+                                navController.navigate(Routes.TeamScreen.createRoute(trainerDni)) {
                                     popUpTo(navController.graph.startDestinationId) { inclusive = false }
                                     launchSingleTop = true
                                 }
@@ -80,7 +86,7 @@ fun ScoreboardScreen(navController: NavHostController) {
                         DropdownMenuItem(
                             text = { Text(stringResource(R.string.players)) },
                             onClick = {
-                                navController.navigate(Routes.PlayerScreen.route) {
+                                navController.navigate(Routes.PlayerScreen.createRoute(trainerDni)) {
                                     popUpTo(navController.graph.startDestinationId) { inclusive = false }
                                     launchSingleTop = true
                                 }

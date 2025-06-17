@@ -23,6 +23,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
+import com.example.mybaskettrainer.navigation.Routes
 import com.example.mybaskettrainer.ui.theme.MyBasketTrainerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -33,6 +34,12 @@ fun TacticsBoardScreen(navController: NavHostController) {
     var currentColor by remember { mutableStateOf(Color.Red) }
     val backgroundPainter = painterResource(id = R.drawable.basketball_court)
     var menuExpanded by remember { mutableStateOf(false) }
+    val trainerDni by remember {
+        mutableStateOf(
+            navController.previousBackStackEntry?.arguments?.getString("trainerDni")
+                ?: navController.currentBackStackEntry?.arguments?.getString("trainerDni") ?: ""
+        )
+    }
 
     Scaffold(
         topBar = {
@@ -54,7 +61,7 @@ fun TacticsBoardScreen(navController: NavHostController) {
                         DropdownMenuItem(
                             text = { Text((stringResource(R.string.main_screen))) },
                             onClick = {
-                                navController.navigate("main_screen") {
+                                navController.navigate(Routes.MainScreen.route) {
                                     popUpTo(navController.graph.startDestinationId) {
                                         inclusive = false
                                     }
@@ -66,7 +73,7 @@ fun TacticsBoardScreen(navController: NavHostController) {
                         DropdownMenuItem(
                             text = { Text((stringResource(R.string.teams))) },
                             onClick = {
-                                navController.navigate("team_screen") {
+                                navController.navigate(Routes.TeamScreen.createRoute(trainerDni)) {
                                     popUpTo(navController.graph.startDestinationId) {
                                         inclusive = false
                                     }
@@ -78,7 +85,7 @@ fun TacticsBoardScreen(navController: NavHostController) {
                         DropdownMenuItem(
                             text = { Text(stringResource(R.string.players)) },
                             onClick = {
-                                navController.navigate("player_screen") {
+                                navController.navigate(Routes.PlayerScreen.createRoute(trainerDni)) {
                                     popUpTo(navController.graph.startDestinationId) {
                                         inclusive = false
                                     }
@@ -90,7 +97,7 @@ fun TacticsBoardScreen(navController: NavHostController) {
                         DropdownMenuItem(
                             text = { Text(stringResource(R.string.agenda)) },
                             onClick = {
-                                navController.navigate("agenda_screen") {
+                                navController.navigate(Routes.AgendaScreen.route) {
                                     popUpTo(navController.graph.startDestinationId) {
                                         inclusive = false
                                     }
@@ -102,7 +109,7 @@ fun TacticsBoardScreen(navController: NavHostController) {
                         DropdownMenuItem(
                             text = { Text(stringResource(R.string.scoreboard)) },
                             onClick = {
-                                navController.navigate("scoreboard_screen") {
+                                navController.navigate(Routes.ScoreboardScreen.route) {
                                     popUpTo(navController.graph.startDestinationId) {
                                         inclusive = false
                                     }

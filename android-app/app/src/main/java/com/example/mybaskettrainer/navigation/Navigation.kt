@@ -66,15 +66,13 @@ fun Navigation(navController: NavHostController) {
 
         // Pantalla para añadir/editar equipos con parámetros teamId (opcional) y trainerDni
         composable(
-            route = Routes.AddEditTeamScreen.route,
+            route = "add_edit_team_screen/{trainerDni}",
             arguments = listOf(
-                navArgument("teamId") { type = NavType.StringType; nullable = true },
                 navArgument("trainerDni") { type = NavType.StringType }
             )
         ) { backStackEntry ->
-            val teamId = backStackEntry.arguments?.getString("teamId")
             val trainerDni = backStackEntry.arguments?.getString("trainerDni") ?: ""
-            AddEditTeamScreen(teamId = teamId, trainerDni = trainerDni, navController = navController)
+            AddEditTeamScreen(teamId = null, trainerDni = trainerDni, navController = navController)
         }
 
         // Pantalla de detalles de equipo con parámetros teamId y trainerDni
@@ -99,11 +97,22 @@ fun Navigation(navController: NavHostController) {
             PlayersScreen(navController = navController, trainerDni = trainerDni)
         }
 
-        // Pantalla para añadir/editar jugadores con parámetros playerId (opcional) y trainerDni
+        // Para añadir un nuevo jugador (sin playerId)
         composable(
-            route = Routes.AddEditPlayerScreen.route,
+            route = "add_edit_player_screen/{trainerDni}",
             arguments = listOf(
-                navArgument("playerId") { type = NavType.StringType; nullable = true },
+                navArgument("trainerDni") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val trainerDni = backStackEntry.arguments?.getString("trainerDni") ?: ""
+            AddEditPlayerScreen(playerId = null, trainerDni = trainerDni, navController = navController)
+        }
+
+        // Para editar un jugador (con playerId)
+        composable(
+            route = "add_edit_player_screen/{playerId}/{trainerDni}",
+            arguments = listOf(
+                navArgument("playerId") { type = NavType.StringType },
                 navArgument("trainerDni") { type = NavType.StringType }
             )
         ) { backStackEntry ->

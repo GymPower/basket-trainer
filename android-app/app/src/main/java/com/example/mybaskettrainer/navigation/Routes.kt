@@ -29,8 +29,8 @@ sealed class Routes(val route: String) {
         fun createRoute(trainerDni: String) = "team_screen/$trainerDni"
     }
 
-    object AddEditTeamScreen : Routes("add_edit_team_screen/{teamId}?/{trainerDni}") {
-        fun createRoute(teamId: String? = null, trainerDni: String) = "add_edit_team_screen/$teamId/$trainerDni"
+    object AddEditTeamScreen : Routes("add_edit_team_screen/{trainerDni}") {
+        fun createRoute(trainerDni: String) = "add_edit_team_screen/$trainerDni"
     }
 
     object TeamDetailScreen : Routes("team_detail_screen/{teamId}/{trainerDni}") {
@@ -42,7 +42,7 @@ sealed class Routes(val route: String) {
     }
 
     object AddEditPlayerScreen : Routes("add_edit_player_screen/{playerId}?/{trainerDni}") {
-        fun createRoute(playerId: String? = null, trainerDni: String) = "add_edit_player_screen/$playerId/$trainerDni"
+        fun createRoute(playerId: String? = null, trainerDni: String) = if (playerId != null) "add_edit_player_screen/$playerId/$trainerDni" else "add_edit_player_screen/$trainerDni"
     }
 
     object PlayerDetailScreen : Routes("player_detail_screen/{playerId}") {

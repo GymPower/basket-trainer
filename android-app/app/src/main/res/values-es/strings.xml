@@ -16,7 +16,7 @@
     <string name="user_wrong">Usuario o contraseña incorrectos</string>
     <string name="connection_error">Error de conexión:</string>
     <string name="back">Atrás</string>
-
+    <string name="team_id">ID de equipo</string>
 
     //RegisterScreen
     <string name="trainer_register">Registro de Entrenador</string>
@@ -82,7 +82,7 @@
     <string name="player_deleted">Jugador borrado</string>
     <string name="error_deleting_player">Error borrando jugador</string>
     <string name="invalid_player_id">Invalido ID del Jugador</string>
-    <string name="team_optional">ID del equipo (opcional)</string>
+    <string name="team_optional">ID del equipo</string>
     <string name="player_updated">Jugador actualizado</string>
     <string name="trainer_dni_error">Error: DNI del entrenador no proporcionado</string>
 

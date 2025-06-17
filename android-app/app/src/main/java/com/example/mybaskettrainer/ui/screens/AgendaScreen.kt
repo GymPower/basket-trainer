@@ -31,6 +31,12 @@ fun AgendaScreen(navController: NavHostController) {
     val context = LocalContext.current
     var events by remember { mutableStateOf(EventStorage.getEvents()) }
     var menuExpanded by remember { mutableStateOf(false) }
+    val trainerDni by remember {
+        mutableStateOf(
+            navController.previousBackStackEntry?.arguments?.getString("trainerDni")
+                ?: navController.currentBackStackEntry?.arguments?.getString("trainerDni") ?: ""
+        )
+    }
 
     Scaffold(
         topBar = {
@@ -68,7 +74,7 @@ fun AgendaScreen(navController: NavHostController) {
                         DropdownMenuItem(
                             text = { Text(stringResource(R.string.teams)) },
                             onClick = {
-                                navController.navigate(Routes.TeamScreen.route) {
+                                navController.navigate(Routes.TeamScreen.createRoute(trainerDni)) {
                                     popUpTo(navController.graph.startDestinationId) { inclusive = false }
                                     launchSingleTop = true
                                 }

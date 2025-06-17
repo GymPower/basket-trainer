@@ -14,7 +14,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.mybaskettrainer.R
 import com.example.mybaskettrainer.data.model.Player
+import com.example.mybaskettrainer.data.model.Team
 import com.example.mybaskettrainer.data.remote.ApiClient
+import com.example.mybaskettrainer.data.remote.dto.PlayerRequest
 import com.example.mybaskettrainer.navigation.Routes
 import kotlinx.coroutines.launch
 
@@ -32,7 +34,31 @@ fun PlayerDetailScreen(playerId: Int, navController: NavHostController) {
         try {
             val response = ApiClient.playerApi.getPlayersByTrainer("12345678Z") // TODO: Pasar el trainerDni correcto
             if (response.isSuccessful) {
-                playerState.value = response.body()?.find { it.playerId == playerId }
+                val playerRequest = response.body()?.find { it.playerId?.toInt() == playerId }
+                playerState.value = playerRequest?.let { request ->
+                    Player(
+                        playerId = request.playerId?.toInt() ?: 0,
+                        name = request.name,
+                        firstSurname = request.surname1,
+                        secondSurname = request.surname2,
+                        birthdate = request.birthdate,
+                        email = request.email,
+                        telephone = request.telephone,
+                        category = request.category,
+                        trainerDni = request.trainerDni,
+                        team = request.teamId?.let { teamId ->
+                            Team(
+                                teamId = teamId.toInt(),
+                                name = "", // Puedes obtener el nombre del equipo desde TeamApi si es necesario
+                                category = "",
+                                league = null,
+                                trainerDni = null,
+                                playerCount = 0,
+                                isFavorite = false
+                            )
+                        }
+                    )
+                }
             } else {
                 Toast.makeText(context, R.string.error_loading_player, Toast.LENGTH_SHORT).show()
             }
@@ -129,7 +155,7 @@ fun PlayerDetailScreen(playerId: Int, navController: NavHostController) {
                         onClick = {
                             scope.launch {
                                 try {
-                                    val response = ApiClient.playerApi.deletePlayer(player.playerId)
+                                    val response = ApiClient.playerApi.deletePlayer(player.playerId.toLong())
                                     if (response.isSuccessful) {
                                         Toast.makeText(context, R.string.player_deleted, Toast.LENGTH_SHORT).show()
                                         navController.popBackStack()

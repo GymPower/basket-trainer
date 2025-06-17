@@ -15,6 +15,7 @@
     <string name="user_wrong">Incorrect username or password</string>
     <string name="connection_error">Connection error:</string>
     <string name="back">Back</string>
+    <string name="team_id">Team ID</string>
 
     //RegisterScreen
     <string name="trainer_register">Coach Registration</string>
@@ -79,7 +80,7 @@
     <string name="error_deleting_player">Error deleting player</string>
     <string name="invalid_player_id">Invalid Player ID</string>
     <string name="edit_player">Edit Player</string>
-    <string name="team_optional">Team ID (optional)</string>
+    <string name="team_optional">Team ID</string>
     <string name="player_updated">Player updated</string>
     <string name="trainer_dni_error">Error: Trainer DNI not provided</string>
 

@@ -95,6 +95,10 @@ fun TeamDetailScreen(teamId: Int, trainerDni: String, navController: NavHostCont
                     style = MaterialTheme.typography.headlineMedium
                 )
                 Text(
+                    text = "${stringResource(R.string.team_id)}: ${team.teamId}",
+                    style = MaterialTheme.typography.bodyLarge
+                )
+                Text(
                     text = "${stringResource(R.string.category)}: ${team.category}",
                     style = MaterialTheme.typography.bodyLarge
                 )
@@ -112,7 +116,7 @@ fun TeamDetailScreen(teamId: Int, trainerDni: String, navController: NavHostCont
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Button(
-                        onClick = { navController.navigate(Routes.AddEditTeamScreen.createRoute(team.teamId.toString(), trainerDni)) },
+                        onClick = { navController.navigate(Routes.AddEditTeamScreen.createRoute(team.teamId.toString())) },
                         modifier = Modifier.weight(1f)
                     ) {
                         Text(stringResource(R.string.edit))

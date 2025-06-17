@@ -25,6 +25,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -50,6 +51,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.mybaskettrainer.R
 import com.example.mybaskettrainer.data.model.Team
 import com.example.mybaskettrainer.data.remote.ApiClient
+import com.example.mybaskettrainer.navigation.Routes
 import com.example.mybaskettrainer.ui.theme.MyBasketTrainerTheme
 import kotlinx.coroutines.launch
 
@@ -102,7 +104,7 @@ fun TeamsScreen(navController: NavHostController, trainerDni: String) {
                         DropdownMenuItem(
                             text = { Text("Pantalla Principal") },
                             onClick = {
-                                navController.navigate("mainScreen/$trainerDni") {
+                                navController.navigate(Routes.MainScreen.createRoute(trainerDni)) {
                                     popUpTo(navController.graph.startDestinationId) { inclusive = false }
                                     launchSingleTop = true
                                 }
@@ -117,7 +119,7 @@ fun TeamsScreen(navController: NavHostController, trainerDni: String) {
                         DropdownMenuItem(
                             text = { Text("Jugadores") },
                             onClick = {
-                                navController.navigate("playerScreen/$trainerDni") {
+                                navController.navigate(Routes.PlayerScreen.createRoute(trainerDni)) {
                                     popUpTo(navController.graph.startDestinationId) { inclusive = false }
                                     launchSingleTop = true
                                 }
@@ -127,7 +129,7 @@ fun TeamsScreen(navController: NavHostController, trainerDni: String) {
                         DropdownMenuItem(
                             text = { Text("Agenda") },
                             onClick = {
-                                navController.navigate("agendaScreen") {
+                                navController.navigate(Routes.AgendaScreen.route) {
                                     popUpTo(navController.graph.startDestinationId) { inclusive = false }
                                     launchSingleTop = true
                                 }
@@ -137,7 +139,7 @@ fun TeamsScreen(navController: NavHostController, trainerDni: String) {
                         DropdownMenuItem(
                             text = { Text("Marcador") },
                             onClick = {
-                                navController.navigate("scoreboardScreen") {
+                                navController.navigate(Routes.ScoreboardScreen.route) {
                                     popUpTo(navController.graph.startDestinationId) { inclusive = false }
                                     launchSingleTop = true
                                 }
@@ -147,7 +149,7 @@ fun TeamsScreen(navController: NavHostController, trainerDni: String) {
                         DropdownMenuItem(
                             text = { Text("Pizarra Táctica") },
                             onClick = {
-                                navController.navigate("tacticsBoard") {
+                                navController.navigate(Routes.TacticsBoardScreen.route) {
                                     popUpTo(navController.graph.startDestinationId) { inclusive = false }
                                     launchSingleTop = true
                                 }
@@ -157,6 +159,16 @@ fun TeamsScreen(navController: NavHostController, trainerDni: String) {
                     }
                 }
             )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { navController.navigate(Routes.AddEditTeamScreen.createRoute(trainerDni = trainerDni)) },
+                modifier = Modifier.padding(16.dp),
+                containerColor = MaterialTheme.colorScheme.secondaryContainer
+
+            ) {
+                Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.add_team))
+            }
         }
     ) { paddingValues ->
         if (isLoading.value) {
@@ -182,7 +194,9 @@ fun TeamsScreen(navController: NavHostController, trainerDni: String) {
                     style = MaterialTheme.typography.bodyLarge
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                Button(onClick = { navController.navigate("addEditTeamScreen") }) {
+                Button(
+                    onClick = { navController.navigate(Routes.AddEditTeamScreen.createRoute(trainerDni = trainerDni)) }
+                ) {
                     Text(stringResource(R.string.add_team))
                 }
             }
@@ -197,7 +211,7 @@ fun TeamsScreen(navController: NavHostController, trainerDni: String) {
                 items(teamsState.value) { team ->
                     TeamCard(
                         team = team,
-                        onClick = { navController.navigate("teamDetailScreen/${team.teamId}") },
+                        onClick = { navController.navigate(Routes.TeamDetailScreen.createRoute(teamId = team.teamId, trainerDni = trainerDni)) },
                         onFavoriteToggle = {
                             val updatedTeam = team.copy(isFavorite = !team.isFavorite)
                             teamsState.value = teamsState.value.map {

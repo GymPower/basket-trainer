@@ -6,7 +6,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -17,7 +20,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.mybaskettrainer.R
 import com.example.mybaskettrainer.data.model.Player
+import com.example.mybaskettrainer.data.model.Team
 import com.example.mybaskettrainer.data.remote.ApiClient
+import com.example.mybaskettrainer.data.remote.dto.PlayerRequest
 import com.example.mybaskettrainer.navigation.Routes
 import kotlinx.coroutines.launch
 
@@ -32,8 +37,9 @@ fun PlayersScreen(navController: NavHostController, trainerDni: String) {
     var categoryFilter by remember { mutableStateOf("") }
     var teamFilter by remember { mutableStateOf("") }
     var menuExpanded by remember { mutableStateOf(false) }
+    val teamsMap = remember { mutableStateOf<Map<Int, String>>(emptyMap()) }
 
-    // Cargar la lista de jugadores
+    // Cargar la lista de jugadores y equipos
     LaunchedEffect(Unit) {
         if (trainerDni.isEmpty()) {
             Toast.makeText(context, "Error: Trainer DNI not provided", Toast.LENGTH_LONG).show()
@@ -42,9 +48,43 @@ fun PlayersScreen(navController: NavHostController, trainerDni: String) {
         }
         isLoading.value = true
         try {
-            val response = ApiClient.playerApi.getPlayersByTrainer(trainerDni)
-            if (response.isSuccessful) {
-                playersState.value = response.body()?.sortedBy { it.firstSurname } ?: emptyList()
+
+            val teamsResponse = ApiClient.teamApi.getTeamsByTrainer(trainerDni)
+            if (teamsResponse.isSuccessful) {
+                val teams = teamsResponse.body() ?: emptyList()
+                teamsMap.value = teams.associate { it.teamId to it.name }
+            } else {
+                Toast.makeText(context, "Error loading teams: ${teamsResponse.code()}", Toast.LENGTH_SHORT).show()
+            }
+
+
+            val playersResponse = ApiClient.playerApi.getPlayersByTrainer(trainerDni)
+            if (playersResponse.isSuccessful) {
+                val players = playersResponse.body()?.map { playerRequest ->
+                    Player(
+                        playerId = playerRequest.playerId?.toInt() ?: 0,
+                        name = playerRequest.name,
+                        firstSurname = playerRequest.surname1,
+                        secondSurname = playerRequest.surname2,
+                        birthdate = playerRequest.birthdate,
+                        email = playerRequest.email,
+                        telephone = playerRequest.telephone,
+                        category = playerRequest.category,
+                        trainerDni = playerRequest.trainerDni,
+                        team = playerRequest.teamId?.let { teamId ->
+                            Team(
+                                teamId = teamId.toInt(),
+                                name = teamsMap.value[teamId.toInt()] ?: "Unknown Team",
+                                category = "",
+                                league = null,
+                                trainerDni = null,
+                                playerCount = 0,
+                                isFavorite = false
+                            )
+                        }
+                    )
+                }?.sortedBy { it.firstSurname } ?: emptyList()
+                playersState.value = players
             } else {
                 Toast.makeText(context, R.string.error_loading_players, Toast.LENGTH_SHORT).show()
             }
@@ -145,9 +185,10 @@ fun PlayersScreen(navController: NavHostController, trainerDni: String) {
             )
         },
         floatingActionButton = {
-            Button(
+            FloatingActionButton(
                 onClick = { navController.navigate(Routes.AddEditPlayerScreen.createRoute(null, trainerDni)) },
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.padding(16.dp),
+                containerColor = MaterialTheme.colorScheme.secondaryContainer
             ) {
                 Icon(
                     Icons.Filled.Add,
@@ -227,7 +268,11 @@ fun PlayersScreen(navController: NavHostController, trainerDni: String) {
                         style = MaterialTheme.typography.bodyLarge
                     )
                     Spacer(modifier = Modifier.height(16.dp))
-                    Button(onClick = { navController.navigate(Routes.AddEditPlayerScreen.createRoute(null, trainerDni)) }) {
+                    FloatingActionButton(
+                        onClick = { navController.navigate(Routes.AddEditPlayerScreen.createRoute(null, trainerDni)) },
+                        modifier = Modifier.padding(16.dp),
+                        containerColor = MaterialTheme.colorScheme.secondaryContainer
+                    ) {
                         Text(stringResource(R.string.add_player))
                     }
                 }
